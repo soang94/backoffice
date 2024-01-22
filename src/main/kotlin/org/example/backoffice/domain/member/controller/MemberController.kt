@@ -20,7 +20,7 @@ class MemberController(
 ) {
 
     @Operation(summary = "member 목록 전체 조회")
-    @GetMapping
+    @GetMapping("/members")
     fun memberList(): ResponseEntity<List<MemberResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)

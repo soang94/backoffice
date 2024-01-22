@@ -1,6 +1,7 @@
 package org.example.backoffice.domain.member.service
 
 import org.example.backoffice.common.exception.ModelNotFoundException
+import org.example.backoffice.common.security.jwt.JwtPlugin
 import org.example.backoffice.domain.member.dto.LoginRequest
 import org.example.backoffice.domain.member.dto.LoginResponse
 import org.example.backoffice.domain.member.dto.MemberResponse
@@ -11,11 +12,14 @@ import org.example.backoffice.domain.member.model.toResponse
 import org.example.backoffice.domain.member.repository.MemberRepository
 import org.example.backoffice.domain.member.repository.MemberRole
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class MemberServiceImpl(
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
+    private val passwordEncoder: PasswordEncoder,
+    private val jwtPlugin: JwtPlugin
 ): MemberService {
     override fun memberList(): List<MemberResponse> {
         return memberRepository.findAll().map { it.toResponse() }
@@ -30,7 +34,13 @@ class MemberServiceImpl(
     override fun login(request: LoginRequest): LoginResponse {
         val member = memberRepository.findByEmail(request.email) ?: throw ModelNotFoundException("Member", null)
 
-        TODO("password 일치하는지 확인하고 invalidException 던져줘야하고, loginResponse 로 토큰 받아와야함")
+        return LoginResponse(
+            accessToken = jwtPlugin.generateAccessToken(
+                subject = member.id.toString(),
+                email = member.email,
+                role = member.role.name
+            )
+        )
     }
 
     override fun signUp(request: SighUpRequest): MemberResponse {
@@ -39,7 +49,7 @@ class MemberServiceImpl(
         return memberRepository.save(
             Member (
                 email = request.email,
-                password = request.password,
+                password = passwordEncoder.encode(request.password),
                 name = request.name,
                 nickname = request.nickname,
                 birthdate = request.birthdate,
