@@ -2,6 +2,7 @@ package org.example.backoffice.domain.member.controller
 
 import io.swagger.v3.oas.annotations.Operation
 import org.example.backoffice.domain.member.dto.LoginRequest
+import org.example.backoffice.domain.member.dto.LoginResponse
 import org.example.backoffice.domain.member.dto.MemberResponse
 import org.example.backoffice.domain.member.dto.SighUpRequest
 import org.springframework.http.ResponseEntity
@@ -32,7 +33,7 @@ class MemberController {
     @PostMapping("/login")
     fun login(
         @RequestBody loginRequest: LoginRequest
-    ): ResponseEntity<MemberResponse> {
+    ): ResponseEntity<LoginResponse> {
         TODO()
     }
 
