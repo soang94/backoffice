@@ -5,6 +5,8 @@ import org.example.backoffice.domain.member.dto.LoginRequest
 import org.example.backoffice.domain.member.dto.LoginResponse
 import org.example.backoffice.domain.member.dto.MemberResponse
 import org.example.backoffice.domain.member.dto.SighUpRequest
+import org.example.backoffice.domain.member.service.MemberService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -13,12 +15,16 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class MemberController {
+class MemberController(
+    private val memberService: MemberService
+) {
 
     @Operation(summary = "member 목록 전체 조회")
     @GetMapping
     fun memberList(): ResponseEntity<List<MemberResponse>> {
-        TODO()
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(memberService.memberList())
     }
 
     @Operation(summary = "member 단건 조회")
@@ -26,7 +32,9 @@ class MemberController {
     fun member(
         @PathVariable memberId: Long
     ): ResponseEntity<MemberResponse> {
-        TODO()
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(memberService.member(memberId))
     }
 
     @Operation(summary = "로그인")
@@ -34,7 +42,9 @@ class MemberController {
     fun login(
         @RequestBody loginRequest: LoginRequest
     ): ResponseEntity<LoginResponse> {
-        TODO()
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(memberService.login(loginRequest))
     }
 
     @Operation(summary = "회원 가입")
@@ -42,6 +52,8 @@ class MemberController {
     fun sighUp(
         @RequestBody signUpRequest: SighUpRequest
     ): ResponseEntity<MemberResponse> {
-        TODO()
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(memberService.signUp(signUpRequest))
     }
 }

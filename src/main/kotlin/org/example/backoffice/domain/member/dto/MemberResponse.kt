@@ -8,6 +8,7 @@ data class MemberResponse (
     val name: String,
     val nickname: String,
     val tmi: String,
-    val createAt: LocalDateTime,
+    val birthdate: String,
+    val createdAt: LocalDateTime,
     val role: String,
 )

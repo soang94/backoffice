@@ -5,6 +5,6 @@ data class SighUpRequest(
     val password: String,
     val name: String,
     val nickname: String,
-    val birth: String,
+    val birthdate: String,
     val role: String,
 )
