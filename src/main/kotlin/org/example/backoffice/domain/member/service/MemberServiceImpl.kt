@@ -6,6 +6,7 @@ import org.example.backoffice.domain.member.dto.LoginResponse
 import org.example.backoffice.domain.member.dto.MemberResponse
 import org.example.backoffice.domain.member.dto.SighUpRequest
 import org.example.backoffice.domain.member.model.Member
+import org.example.backoffice.domain.member.model.checkedEmailOrNicknameExists
 import org.example.backoffice.domain.member.model.toResponse
 import org.example.backoffice.domain.member.repository.MemberRepository
 import org.example.backoffice.domain.member.repository.MemberRole
@@ -33,14 +34,12 @@ class MemberServiceImpl(
     }
 
     override fun signUp(request: SighUpRequest): MemberResponse {
-        if (memberRepository.existsByEmail(request.email)) {
-            throw IllegalStateException("Email is already in use")
-        }
+        checkedEmailOrNicknameExists(request.email, request.nickname, memberRepository)
 
         return memberRepository.save(
             Member (
                 email = request.email,
-                password = request.password, //
+                password = request.password,
                 name = request.name,
                 nickname = request.nickname,
                 birthdate = request.birthdate,

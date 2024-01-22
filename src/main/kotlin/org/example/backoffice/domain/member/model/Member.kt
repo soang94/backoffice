@@ -2,12 +2,13 @@ package org.example.backoffice.domain.member.model
 
 import jakarta.persistence.*
 import org.example.backoffice.domain.member.dto.MemberResponse
+import org.example.backoffice.domain.member.repository.MemberRepository
 import org.example.backoffice.domain.member.repository.MemberRole
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 @Entity
-@Table(name="member")
+@Table(name="members")
 class Member (
     @Column(name = "email" )
     var email: String,
@@ -37,6 +38,7 @@ class Member (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
 }
 
 fun Member.toResponse(): MemberResponse {
@@ -51,4 +53,15 @@ fun Member.toResponse(): MemberResponse {
         role = role.name,
     )
 }
+
+fun checkedEmailOrNicknameExists(email: String, nickname: String, memberRepository: MemberRepository) {
+    if (memberRepository.existsByEmail(email)) {
+        throw IllegalArgumentException("이미 사용 중인 이메일입니다.")
+    }
+
+    if (memberRepository.existsByNickname(nickname)) {
+        throw IllegalArgumentException("이미 사용 중인 닉네임입니다.")
+    }
+}
+
 
