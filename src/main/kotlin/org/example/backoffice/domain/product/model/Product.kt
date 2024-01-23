@@ -1,7 +1,6 @@
 package org.example.backoffice.domain.product.model
 
 import jakarta.persistence.*
-import org.example.backoffice.domain.user.model.Member
 import org.example.backoffice.domain.product.dto.ProductResponse
 import org.example.backoffice.domain.user.model.User
 import org.hibernate.annotations.OnDelete
