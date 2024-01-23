@@ -1,14 +1,13 @@
 package org.example.backoffice.domain.user.service
 
-import org.example.backoffice.domain.user.dto.LoginRequest
-import org.example.backoffice.domain.user.dto.LoginResponse
-import org.example.backoffice.domain.user.dto.UserResponse
-import org.example.backoffice.domain.user.dto.SighUpRequest
+import org.example.backoffice.domain.user.dto.*
 
 interface UserService {
     fun userList(): List<UserResponse>
 
     fun user(userId: Long): UserResponse
+
+    fun updateProfile(userId: Long, request: UpdateProfileRequest): UserResponse
 
     fun login(request: LoginRequest): LoginResponse
 

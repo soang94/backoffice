@@ -1,10 +1,7 @@
 package org.example.backoffice.domain.user.controller
 
 import io.swagger.v3.oas.annotations.Operation
-import org.example.backoffice.domain.user.dto.LoginRequest
-import org.example.backoffice.domain.user.dto.LoginResponse
-import org.example.backoffice.domain.user.dto.UserResponse
-import org.example.backoffice.domain.user.dto.SighUpRequest
+import org.example.backoffice.domain.user.dto.*
 import org.example.backoffice.domain.user.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -12,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
@@ -29,7 +27,7 @@ class UserController(
             .body(userService.userList())
     }
 
-    @Operation(summary = "member 단건 조회")
+    @Operation(summary = "user 단건 조회, user profile")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MEMBER')")
     @GetMapping("/users/{userId}")
     fun user(
@@ -38,6 +36,17 @@ class UserController(
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(userService.user(userId))
+    }
+
+    @Operation(summary = "user profile 수정")
+    @PutMapping("/users/{userId}")
+    fun updateProfile(
+        @PathVariable userId: Long,
+        @RequestBody updateProfileRequest: UpdateProfileRequest
+    ): ResponseEntity<UserResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(userService.updateProfile(userId, updateProfileRequest))
     }
 
     @Operation(summary = "로그인")

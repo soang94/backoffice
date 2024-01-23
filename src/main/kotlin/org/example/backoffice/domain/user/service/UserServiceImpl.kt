@@ -2,10 +2,7 @@ package org.example.backoffice.domain.user.service
 
 import org.example.backoffice.common.exception.ModelNotFoundException
 import org.example.backoffice.common.security.jwt.JwtPlugin
-import org.example.backoffice.domain.user.dto.LoginRequest
-import org.example.backoffice.domain.user.dto.LoginResponse
-import org.example.backoffice.domain.user.dto.UserResponse
-import org.example.backoffice.domain.user.dto.SighUpRequest
+import org.example.backoffice.domain.user.dto.*
 import org.example.backoffice.domain.user.model.User
 import org.example.backoffice.domain.user.model.checkedEmailOrNicknameExists
 import org.example.backoffice.domain.user.model.toResponse
@@ -29,6 +26,12 @@ class UserServiceImpl(
         val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
 
         return user.toResponse()
+    }
+
+    override fun updateProfile(userId: Long, request: UpdateProfileRequest): UserResponse {
+        val profile = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
+        profile.toUpdate(request)
+        return profile.toResponse()
     }
 
     override fun login(request: LoginRequest): LoginResponse {

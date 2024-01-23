@@ -1,6 +1,7 @@
 package org.example.backoffice.domain.user.model
 
 import jakarta.persistence.*
+import org.example.backoffice.domain.user.dto.UpdateProfileRequest
 import org.example.backoffice.domain.user.dto.UserResponse
 import org.example.backoffice.domain.user.repository.UserRepository
 import org.example.backoffice.domain.user.repository.UserRole
@@ -38,6 +39,11 @@ class User (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
+    fun toUpdate(request: UpdateProfileRequest) {
+        name = request.name
+        info = request.info
+        password = request.password
+    }
 }
 
 fun User.toResponse(): UserResponse {
