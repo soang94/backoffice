@@ -20,10 +20,10 @@ class UserController(
     private val userService: UserService
 ) {
 
-    @Operation(summary = "member 목록 전체 조회")
+    @Operation(summary = "user 목록 전체 조회")
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/members")
-    fun memberList(): ResponseEntity<List<UserResponse>> {
+    @GetMapping("/users")
+    fun userList(): ResponseEntity<List<UserResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(userService.userList())
@@ -31,13 +31,13 @@ class UserController(
 
     @Operation(summary = "member 단건 조회")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MEMBER')")
-    @GetMapping("/members/{memberId}")
-    fun member(
-        @PathVariable memberId: Long
+    @GetMapping("/users/{userId}")
+    fun user(
+        @PathVariable userId: Long
     ): ResponseEntity<UserResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(userService.user(memberId))
+            .body(userService.user(userId))
     }
 
     @Operation(summary = "로그인")

@@ -8,7 +8,7 @@ import org.example.backoffice.domain.user.dto.SighUpRequest
 interface UserService {
     fun userList(): List<UserResponse>
 
-    fun user(memberId: Long): UserResponse
+    fun user(userId: Long): UserResponse
 
     fun login(request: LoginRequest): LoginResponse
 

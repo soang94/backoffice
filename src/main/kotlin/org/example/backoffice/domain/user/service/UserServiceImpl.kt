@@ -25,14 +25,14 @@ class UserServiceImpl(
         return userRepository.findAll().map { it.toResponse() }
     }
 
-    override fun user(memberId: Long): UserResponse {
-        val user = userRepository.findByIdOrNull(memberId) ?: throw ModelNotFoundException("Member", memberId)
+    override fun user(userId: Long): UserResponse {
+        val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
 
         return user.toResponse()
     }
 
     override fun login(request: LoginRequest): LoginResponse {
-        val user = userRepository.findByEmail(request.email) ?: throw ModelNotFoundException("Member", null)
+        val user = userRepository.findByEmail(request.email) ?: throw ModelNotFoundException("User", null)
 
         return LoginResponse(
             accessToken = jwtPlugin.generateAccessToken(
