@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 class Category (
     @Column(name = "name") var name: String,
     @Column(name = "info") var info: String,
-    @Column(name = "created_at") var createdAt: LocalDateTime
+    @Column(name = "created_at") var createdAt: LocalDateTime,
 ){
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
