@@ -1,6 +1,7 @@
 package org.example.backoffice.domain.review.model
 
 import jakarta.persistence.*
+import org.example.backoffice.common.model.BaseTime
 import org.example.backoffice.domain.review.dto.ReviewResponse
 import java.time.LocalDateTime
 
@@ -10,9 +11,7 @@ class Review(
     @Column(name = "name") var name: String,
     @Column(name = "content") var content: String,
     @Column(name = "password") var password: String,
-    @Column(name = "created_at") var createdAt: LocalDateTime,
-    @Column(name = "updated_at") var updatedAt: LocalDateTime
-) {
+):BaseTime() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
@@ -23,7 +22,7 @@ fun Review.toResponse(): ReviewResponse {
         id = id!!,
         name = name,
         content = content,
-        createdAt = createdAt,
-        updatedAt = updatedAt
+        createdAt = this.createdAt,
+        updatedAt = this.updatedAt
     )
 }

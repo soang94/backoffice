@@ -12,5 +12,5 @@ data class OrderResponse(
     val nickname: String,
     val name: String,
     val createdAt: LocalDateTime,
-    val updateAt: LocalDateTime
+    val updatedAt: LocalDateTime
 )

@@ -4,6 +4,5 @@ import java.time.LocalDateTime
 
 data class CategoryCreateRequest (
     var name : String,
-    var info : String,
-    var createdAt : LocalDateTime,
+    var info : String
 )

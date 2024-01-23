@@ -5,7 +5,5 @@ import java.time.LocalDateTime
 data class ReviewRequest(
     val name: String,
     val content: String,
-    val password: String,
-    val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime
+    val password: String
 )

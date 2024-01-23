@@ -10,5 +10,6 @@ data class UserResponse (
     val info: String,
     val birthdate: String,
     val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime,
     val role: String,
 )

@@ -5,7 +5,6 @@ import org.example.backoffice.domain.product.dto.CategoryResponse
 import org.example.backoffice.domain.product.model.Category
 import org.example.backoffice.domain.product.model.toResponse
 import org.example.backoffice.domain.product.repository.CategoryRepository
-import org.example.backoffice.domain.user.repository.UserRole
 import org.springframework.stereotype.Service
 
 @Service
@@ -16,8 +15,7 @@ class CategoryServiceImpl(
         return categoryRepository.save(
             Category(
                 name = request.name,
-                info = request.info,
-                createdAt = request.createdAt
+                info = request.info
             )
         ).toResponse()
 

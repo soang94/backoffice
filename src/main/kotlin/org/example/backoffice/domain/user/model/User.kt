@@ -1,6 +1,7 @@
 package org.example.backoffice.domain.user.model
 
 import jakarta.persistence.*
+import org.example.backoffice.common.model.BaseTime
 import org.example.backoffice.domain.user.dto.UpdateProfileRequest
 import org.example.backoffice.domain.user.dto.UserResponse
 import org.example.backoffice.domain.user.repository.UserRepository
@@ -28,13 +29,10 @@ class User (
     @Column(name = "info" )
     var info: String,
 
-    @Column(name = "created_at" )
-    var createdAt: LocalDateTime,
-
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     var role: UserRole
-){
+):BaseTime(){
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
@@ -54,7 +52,8 @@ fun User.toResponse(): UserResponse {
         nickname = nickname,
         info = info,
         birthdate = birthdate,
-        createdAt = createdAt,
+        createdAt = this.createdAt,
+        updatedAt = this.updatedAt,
         role = role.name,
     )
 }
