@@ -11,13 +11,14 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
 
+@RestController
 class CategoryController (private val categoryService: CategoryService){
-    @PostMapping("/new")
-    fun createCategory (@AuthenticationPrincipal user: User, @RequestBody categoryCreateRequest: CategoryCreateRequest
+    @PostMapping("/categories")
+    fun createCategory (
+        @RequestBody categoryCreateRequest: CategoryCreateRequest
     ): ResponseEntity<CategoryResponse> {
-        val userRoleString = user.role.toString()
-        val categoryResponse = categoryService.createCategory(categoryCreateRequest, userRoleString )
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryResponse)
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.createCategory(categoryCreateRequest))
     }
 }
