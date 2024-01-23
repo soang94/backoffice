@@ -1,11 +1,11 @@
-package org.example.backoffice.domain.comment.dto
+package org.example.backoffice.domain.review.dto
 
 import java.time.LocalDateTime
 
-data class CommentsResponse(
-    val id: Long,
+data class ReviewRequest(
     val name: String,
     val content: String,
+    val password: String,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime
 )

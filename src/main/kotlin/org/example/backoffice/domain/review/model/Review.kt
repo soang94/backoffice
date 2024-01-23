@@ -1,12 +1,12 @@
-package org.example.backoffice.domain.comment.model
+package org.example.backoffice.domain.review.model
 
 import jakarta.persistence.*
-import org.example.backoffice.domain.comment.dto.CommentsResponse
+import org.example.backoffice.domain.review.dto.ReviewResponse
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "comments")
-class Comments(
+@Table(name = "reviews")
+class Review(
     @Column(name = "name") var name: String,
     @Column(name = "content") var content: String,
     @Column(name = "password") var password: String,
@@ -18,8 +18,8 @@ class Comments(
     var id: Long? = null
 }
 
-fun Comments.toResponse(): CommentsResponse {
-    return CommentsResponse(
+fun Review.toResponse(): ReviewResponse {
+    return ReviewResponse(
         id = id!!,
         name = name,
         content = content,
