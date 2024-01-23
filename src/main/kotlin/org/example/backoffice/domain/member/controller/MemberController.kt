@@ -8,6 +8,7 @@ import org.example.backoffice.domain.member.dto.SighUpRequest
 import org.example.backoffice.domain.member.service.MemberService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -20,6 +21,7 @@ class MemberController(
 ) {
 
     @Operation(summary = "member 목록 전체 조회")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/members")
     fun memberList(): ResponseEntity<List<MemberResponse>> {
         return ResponseEntity
@@ -28,6 +30,7 @@ class MemberController(
     }
 
     @Operation(summary = "member 단건 조회")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MEMBER')")
     @GetMapping("/members/{memberId}")
     fun member(
         @PathVariable memberId: Long
