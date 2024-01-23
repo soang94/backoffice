@@ -14,11 +14,11 @@ abstract class BaseTime {
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    var createdAt: LocalDateTime = LocalDateTime.MIN
+    var createdAt: LocalDateTime = LocalDateTime.now()
         protected set
 
     @LastModifiedDate
-    @Column(nullable = false, updatable = false)
-    var updatedAt: LocalDateTime = LocalDateTime.MIN
+    @Column(nullable = false)
+    var updatedAt: LocalDateTime = LocalDateTime.now()
         protected set
 }

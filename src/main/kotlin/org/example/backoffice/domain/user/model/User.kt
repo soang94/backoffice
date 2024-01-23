@@ -6,7 +6,6 @@ import org.example.backoffice.domain.user.dto.UpdateProfileRequest
 import org.example.backoffice.domain.user.dto.UserResponse
 import org.example.backoffice.domain.user.repository.UserRepository
 import org.example.backoffice.domain.user.repository.UserRole
-import java.time.LocalDateTime
 
 @Entity
 @Table(name="app_user")
