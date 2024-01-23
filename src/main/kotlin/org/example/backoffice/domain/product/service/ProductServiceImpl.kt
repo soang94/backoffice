@@ -41,13 +41,13 @@ class ProductServiceImpl(
 
     override fun getProductById(productId: Long): ProductResponse {
         val product =
-            productRepository.findByProductIdOrNull(productId) ?: throw ModelNotFoundException("Product", productId)
+            productRepository.findByIdOrNull(productId) ?: throw ModelNotFoundException("Product", productId)
         return product.toResponse()
     }
 
     override fun createProduct(request: ProductCreateRequest, userId: Long): ProductResponse {
         val user: User = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
-        val category: Category = categoryRepository.findByCategoryIdOrNull(request.categoryId) ?: throw ModelNotFoundException("category", request.categoryId)
+        val category: Category = categoryRepository.findByIdOrNull(request.categoryId) ?: throw ModelNotFoundException("category", request.categoryId)
         val createdProduct = productRepository.save(
             Product(
                 user = user,
@@ -65,7 +65,7 @@ class ProductServiceImpl(
 
     override fun updateProduct(productId: Long, userId: Long, request: ProductCreateRequest): ProductResponse {
         val product =
-            productRepository.findByProductIdOrNull(productId) ?: throw ModelNotFoundException("product", productId)
+            productRepository.findByIdOrNull(productId) ?: throw ModelNotFoundException("product", productId)
         if (product.user.id != userId) {
             throw AccessDeniedException("User with ID $userId does not have permission to update post with ID $productId")
         }
@@ -80,7 +80,7 @@ class ProductServiceImpl(
     }
 
     override fun deleteProduct(productId: Long, userId: Long) {
-        val product = productRepository.findByProductIdOrNull(productId) ?: throw ModelNotFoundException("product", productId)
+        val product = productRepository.findByIdOrNull(productId) ?: throw ModelNotFoundException("product", productId)
         if (product.user.id != userId) {
             throw AccessDeniedException("User with ID $userId does not have permission to update post with ID $productId")
         }
