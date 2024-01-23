@@ -5,5 +5,5 @@ import org.example.backoffice.domain.product.model.Product
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface CategoryRepository : JpaRepository<Category, Long> {
-    fun findByCategoryIdOrNull(categoryId : Long) : Category?
+
 }
