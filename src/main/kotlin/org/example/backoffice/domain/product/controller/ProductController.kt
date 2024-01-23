@@ -26,8 +26,8 @@ class ProductController (private val productService: ProductService){
     fun createProduct (@AuthenticationPrincipal user: User ,@RequestBody productCreateRequest: ProductCreateRequest
     ): ResponseEntity<ProductResponse>{
         val userId = user.id!!
-        val postResponse = productService.createProduct(productCreateRequest, userId)
-        return ResponseEntity.status(HttpStatus.CREATED).body(postResponse)
+        val productResponse = productService.createProduct(productCreateRequest, userId)
+        return ResponseEntity.status(HttpStatus.CREATED).body(productResponse)
     }
 
     @PatchMapping("/{productId}")

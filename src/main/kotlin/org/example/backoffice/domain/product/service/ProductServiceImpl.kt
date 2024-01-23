@@ -9,6 +9,8 @@ import org.example.backoffice.domain.product.model.toResponse
 import org.example.backoffice.domain.product.repository.CategoryRepository
 import org.example.backoffice.domain.product.repository.ProductRepository
 import org.example.backoffice.domain.user.model.User
+import org.example.backoffice.domain.user.repository.UserRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.nio.file.AccessDeniedException
 
