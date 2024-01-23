@@ -1,11 +1,11 @@
 package org.example.backoffice.domain.product.model
 
 import jakarta.persistence.*
+import org.example.backoffice.common.model.BaseTime
 import org.example.backoffice.domain.product.dto.ProductResponse
 import org.example.backoffice.domain.user.model.User
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction
-import java.time.LocalDateTime
 
 @Entity
 @Table(name = "product")
@@ -27,12 +27,8 @@ class Product (
     @JoinColumn(name = "category")
     var category: Category,
 
-    @Column(name = "created_at") var createdAt: LocalDateTime,
 
-    @Column(name = "updated_at") var updatedAt: LocalDateTime?,
-
-
-){
+): BaseTime(){
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
@@ -48,6 +44,6 @@ fun Product.toResponse(): ProductResponse{
         info = info,
         categoryId = category.id!!,
         createdAt = this.createdAt,
-        updatedAt = this.updatedAt,
+        updatedAt = this.updatedAt
     )
 }

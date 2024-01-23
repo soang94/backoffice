@@ -6,5 +6,5 @@ data class CategoryResponse (
     val id : Long?,
     val name : String,
     val info : String,
-    var createdAt : LocalDateTime,
+    var createdAt : LocalDateTime
 )

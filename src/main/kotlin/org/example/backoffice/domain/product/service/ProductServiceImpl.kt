@@ -55,9 +55,7 @@ class ProductServiceImpl(
                 price = request.price,
                 title = request.title,
                 info = request.info,
-                category = category,
-                createdAt = request.createdAt,
-                updatedAt = request.updatedAt,
+                category = category
             )
         )
         return createdProduct.toResponse()

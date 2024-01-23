@@ -9,6 +9,4 @@ class ProductCreateRequest (
   var title: String,
   var info: String,
   var categoryId: Long,
-  var createdAt : LocalDateTime,
-  var updatedAt : LocalDateTime?
 )

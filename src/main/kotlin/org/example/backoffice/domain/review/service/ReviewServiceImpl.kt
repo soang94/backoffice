@@ -29,9 +29,7 @@ class ReviewServiceImpl(
             Review(
                 name = request.name,
                 content = request.content,
-                password = request.password,
-                createdAt = request.createdAt,
-                updatedAt = request.updatedAt
+                password = request.password
             )
         )
         return createReview .toResponse()

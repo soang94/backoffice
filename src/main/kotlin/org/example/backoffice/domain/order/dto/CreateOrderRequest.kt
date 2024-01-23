@@ -5,6 +5,6 @@ data class CreateOrderRequest(
     // val memberId: Long,
     val title: String,
     val nickname: String,
-    val name: String,
+    val name: String
 )
 
