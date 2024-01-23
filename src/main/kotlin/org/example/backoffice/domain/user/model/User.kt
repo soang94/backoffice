@@ -1,15 +1,14 @@
-package org.example.backoffice.domain.member.model
+package org.example.backoffice.domain.user.model
 
 import jakarta.persistence.*
-import org.example.backoffice.domain.member.dto.MemberResponse
-import org.example.backoffice.domain.member.repository.MemberRepository
-import org.example.backoffice.domain.member.repository.MemberRole
+import org.example.backoffice.domain.user.dto.UserResponse
+import org.example.backoffice.domain.user.repository.UserRepository
+import org.example.backoffice.domain.user.repository.UserRole
 import java.time.LocalDateTime
-import java.time.ZonedDateTime
 
 @Entity
-@Table(name="members")
-class Member (
+@Table(name="app_user")
+class User (
     @Column(name = "email" )
     var email: String,
 
@@ -33,7 +32,7 @@ class Member (
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    var role: MemberRole
+    var role: UserRole
 ){
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,8 +40,8 @@ class Member (
 
 }
 
-fun Member.toResponse(): MemberResponse {
-    return MemberResponse(
+fun User.toResponse(): UserResponse {
+    return UserResponse(
         id = id!!,
         email = email,
         name = name,
@@ -54,12 +53,12 @@ fun Member.toResponse(): MemberResponse {
     )
 }
 
-fun checkedEmailOrNicknameExists(email: String, nickname: String, memberRepository: MemberRepository) {
-    if (memberRepository.existsByEmail(email)) {
+fun checkedEmailOrNicknameExists(email: String, nickname: String, userRepository: UserRepository) {
+    if (userRepository.existsByEmail(email)) {
         throw IllegalArgumentException("이미 사용 중인 이메일입니다.")
     }
 
-    if (memberRepository.existsByNickname(nickname)) {
+    if (userRepository.existsByNickname(nickname)) {
         throw IllegalArgumentException("이미 사용 중인 닉네임입니다.")
     }
 }

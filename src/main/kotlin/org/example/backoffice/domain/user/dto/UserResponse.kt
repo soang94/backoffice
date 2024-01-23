@@ -1,8 +1,8 @@
-package org.example.backoffice.domain.member.dto
+package org.example.backoffice.domain.user.dto
 
 import java.time.LocalDateTime
 
-data class MemberResponse (
+data class UserResponse (
     val id: Long,
     val email: String,
     val name: String,

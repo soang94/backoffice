@@ -1,4 +1,4 @@
-package org.example.backoffice.domain.member.dto
+package org.example.backoffice.domain.user.dto
 
 import java.time.LocalDateTime
 

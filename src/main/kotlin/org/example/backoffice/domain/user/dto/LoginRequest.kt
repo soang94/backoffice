@@ -1,4 +1,4 @@
-package org.example.backoffice.domain.member.dto
+package org.example.backoffice.domain.user.dto
 
 data class LoginRequest (
     val email: String,
