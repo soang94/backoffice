@@ -17,8 +17,8 @@ class CategoryServiceImpl(
     override fun createCategory(request: CategoryCreateRequest): CategoryResponse {
         return categoryRepository.save(
             Category(
-                name = request.name,
-                info = request.info
+                name = request.name!!,
+                info = request.info!!
             )
         ).toResponse()
 
@@ -40,8 +40,8 @@ class CategoryServiceImpl(
         val category =
             categoryRepository.findByIdOrNull(categoryId) ?: throw ModelNotFoundException("category", categoryId)
 
-        category.name = request.name ?: request.name
-        category.info = request.info ?: request.name
+        category.name = request.name ?: category.name
+        category.info = request.info ?: category.name
         val updateCategory = categoryRepository.save(category)
 
         return updateCategory.toResponse()
