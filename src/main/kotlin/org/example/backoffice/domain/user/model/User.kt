@@ -24,8 +24,8 @@ class User (
     @Column(name = "nickname" )
     var nickname: String,
 
-    @Column(name = "tmi" )
-    var tmi: String,
+    @Column(name = "info" )
+    var info: String,
 
     @Column(name = "created_at" )
     var createdAt: LocalDateTime,
@@ -46,7 +46,7 @@ fun User.toResponse(): UserResponse {
         email = email,
         name = name,
         nickname = nickname,
-        tmi = tmi,
+        info = info,
         birthdate = birthdate,
         createdAt = createdAt,
         role = role.name,

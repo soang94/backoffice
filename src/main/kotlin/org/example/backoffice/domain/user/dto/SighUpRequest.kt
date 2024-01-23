@@ -9,6 +9,6 @@ data class SighUpRequest(
     val nickname: String,
     val birthdate: String,
     val createdAt: LocalDateTime,
-    val tmi: String,
+    val info: String,
     val role: String,
 )

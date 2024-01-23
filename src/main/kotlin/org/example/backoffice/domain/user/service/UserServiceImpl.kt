@@ -54,7 +54,7 @@ class UserServiceImpl(
                 nickname = request.nickname,
                 birthdate = request.birthdate,
                 createdAt = request.createdAt,
-                tmi = request.tmi,
+                info = request.info,
                 role = when (request.role) {
                     "ADMIN" -> UserRole.ADMIN
                     "MEMBER" -> UserRole.MEMBER
