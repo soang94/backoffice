@@ -30,7 +30,8 @@ class CommentsServiceImpl(
                 name = request.name,
                 content = request.content,
                 password = request.password,
-                createdAt = request.createdAt
+                createdAt = request.createdAt,
+                updatedAt = request.updatedAt
             )
         )
         return createComments.toResponse()

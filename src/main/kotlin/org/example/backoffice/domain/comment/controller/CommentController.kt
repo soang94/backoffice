@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
-@RequestMapping("/product/{productId}/comment/{commentId}")
+@RequestMapping("/products/{productId}/comments/{commentId}")
 @RestController
 class CommentController(
     private val commentsService: CommentsService

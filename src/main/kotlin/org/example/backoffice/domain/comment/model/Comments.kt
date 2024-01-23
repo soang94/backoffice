@@ -10,7 +10,8 @@ class Comments(
     @Column(name = "name") var name: String,
     @Column(name = "content") var content: String,
     @Column(name = "password") var password: String,
-    @Column(name = "created_at") var createdAt: LocalDateTime
+    @Column(name = "created_at") var createdAt: LocalDateTime,
+    @Column(name = "updated_at") var updatedAt: LocalDateTime
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +23,7 @@ fun Comments.toResponse(): CommentsResponse {
         id = id!!,
         name = name,
         content = content,
-        createdAt = createdAt
+        createdAt = createdAt,
+        updatedAt = updatedAt
     )
 }

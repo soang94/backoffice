@@ -6,5 +6,6 @@ data class CommentsRequest(
     val name: String,
     val content: String,
     val password: String,
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime
 )
