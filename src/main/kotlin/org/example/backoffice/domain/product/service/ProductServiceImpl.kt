@@ -10,6 +10,7 @@ import org.example.backoffice.domain.product.repository.CategoryRepository
 import org.example.backoffice.domain.product.repository.ProductRepository
 import org.example.backoffice.domain.user.model.User
 import org.example.backoffice.domain.user.repository.UserRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.nio.file.AccessDeniedException
 
@@ -45,7 +46,7 @@ class ProductServiceImpl(
     }
 
     override fun createProduct(request: ProductCreateRequest, userId: Long): ProductResponse {
-        val user: User = userRepository.findByIdOrNull(Id) ?: throw ModelNotFoundException("User", userId)
+        val user: User = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
         val category: Category = categoryRepository.findByCategoryIdOrNull(request.categoryId) ?: throw ModelNotFoundException("category", request.categoryId)
         val createdProduct = productRepository.save(
             Product(
