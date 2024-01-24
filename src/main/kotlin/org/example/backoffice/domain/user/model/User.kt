@@ -19,8 +19,8 @@ class User (
     @Column(name = "name" )
     var name: String,
 
-    @Column(name = "birthdate" )
-    var birthdate: String,
+    @Column(name = "birthDate" )
+    var birthDate: String,
 
     @Column(name = "nickname" )
     var nickname: String,
@@ -50,7 +50,7 @@ fun User.toResponse(): UserResponse {
         name = name,
         nickname = nickname,
         info = info,
-        birthdate = birthdate,
+        birthDate = birthDate,
         createdAt = this.createdAt,
         updatedAt = this.updatedAt,
         role = role.name,
