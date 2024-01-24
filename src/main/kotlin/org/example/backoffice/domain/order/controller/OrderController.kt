@@ -34,10 +34,11 @@ class OrderController(
             .body(orderService.getAllOrderList())
     }
 
-    @PostMapping("/{productId}")
-    fun createOrder(@PathVariable productId: Long, @RequestBody createOrderRequest: CreateOrderRequest,
+    @PostMapping()
+    fun createOrder(@RequestBody createOrderRequest: CreateOrderRequest,
                     @AuthenticationPrincipal userPrincipal: UserPrincipal)
             : ResponseEntity<OrderResponse> {
+        val productId = createOrderRequest.productId
         val userId = userPrincipal.id
         return ResponseEntity
             .status(HttpStatus.OK)

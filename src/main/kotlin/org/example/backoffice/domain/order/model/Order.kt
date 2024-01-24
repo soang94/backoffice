@@ -37,7 +37,7 @@ fun Order.toResponse(): OrderResponse{
         id = id,
         name = user.name,
         nickname = user.nickname,
-        price = product.price,
+        price = product.price * quantity,
         productId = product.id,
         quantity = quantity
     )
