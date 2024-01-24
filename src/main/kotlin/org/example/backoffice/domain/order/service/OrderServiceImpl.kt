@@ -4,14 +4,19 @@ import jakarta.transaction.Transactional
 import org.example.backoffice.common.exception.ModelNotFoundException
 import org.example.backoffice.domain.order.dto.CreateOrderRequest
 import org.example.backoffice.domain.order.dto.OrderResponse
+import org.example.backoffice.domain.order.model.Order
+import org.example.backoffice.domain.order.model.toResponse
 import org.example.backoffice.domain.order.repository.OrderRepository
+import org.example.backoffice.domain.product.repository.ProductRepository
+import org.example.backoffice.domain.user.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class OrderServiceImpl(
-    private val orderRepository: OrderRepository
+    private val orderRepository: OrderRepository,
+    private val productRepository: ProductRepository,
+    private val userRepository: UserRepository
 ) : OrderService {
     override fun getAllOrderList(): List<OrderResponse> {
         val orders = orderRepository.findAll()
@@ -24,6 +29,7 @@ class OrderServiceImpl(
                 nickname = order.user.nickname,
                 name = order.user.name,
                 createdAt= order.createdAt,
+                quantity = order.quantity
             )
         }
     }
@@ -39,13 +45,24 @@ class OrderServiceImpl(
             nickname = order.user.nickname,
             name = order.user.name,
             createdAt= order.createdAt,
+            quantity = order.quantity
         )
     }
 
-    @Transactional
-    override fun createOrder(request: CreateOrderRequest): OrderResponse {
-        TODO()
+    override fun createOrder(productId: Long, request: CreateOrderRequest, userId: Long):
+            OrderResponse {
+        val product = productRepository.findByIdOrNull(productId) ?: throw ModelNotFoundException("Product", productId)
+        val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
+        val orders = orderRepository.save(
+                Order(
+                    product = product,
+                    user = user,
+                    quantity = request.quantity
+                )
+            )
+        return orders.toResponse()
     }
+
 
     @Transactional
     override fun deleteOrder(orderId: Long) {

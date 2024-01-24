@@ -7,6 +7,7 @@ data class OrderResponse(
     val productId: Long?,
     val category: String?,
     val price: Long,
+    val quantity: Int,
     val nickname: String,
     val name: String,
     val createdAt: LocalDateTime
