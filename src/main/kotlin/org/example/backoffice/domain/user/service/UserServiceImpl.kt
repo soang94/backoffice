@@ -31,6 +31,7 @@ class UserServiceImpl(
     override fun updateProfile(userId: Long, request: UpdateProfileRequest): UserResponse {
         val profile = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
         profile.toUpdate(request)
+        userRepository.save(profile)
         return profile.toResponse()
     }
 
