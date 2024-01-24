@@ -1,6 +1,7 @@
 package org.example.backoffice.domain.user.controller
 
 import io.swagger.v3.oas.annotations.Operation
+import jakarta.validation.Valid
 import org.example.backoffice.common.security.jwt.UserPrincipal
 import org.example.backoffice.domain.user.dto.*
 import org.example.backoffice.domain.user.service.UserService
@@ -57,7 +58,7 @@ class UserController(
     @Operation(summary = "로그인")
     @PostMapping("/login")
     fun login(
-        @RequestBody loginRequest: LoginRequest
+        @Valid @RequestBody loginRequest: LoginRequest
     ): ResponseEntity<LoginResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
@@ -67,7 +68,7 @@ class UserController(
     @Operation(summary = "회원 가입")
     @PostMapping("/signup")
     fun sighUp(
-        @RequestBody signUpRequest: SighUpRequest
+        @Valid @RequestBody signUpRequest: SighUpRequest
     ): ResponseEntity<UserResponse> {
         return ResponseEntity
             .status(HttpStatus.CREATED)

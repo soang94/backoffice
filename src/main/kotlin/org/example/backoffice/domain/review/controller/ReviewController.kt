@@ -7,14 +7,14 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
-@RequestMapping("/products/{productId}/reviews/{reviewId}")
+@RequestMapping("/products/{productId}/reviews")
 @RestController
 class ReviewController(
     private val reviewService: ReviewService
 ) {
 
     //댓글 단건 조회
-    @GetMapping
+    @GetMapping("/{reviewId}")
     fun getReview(
         @PathVariable productId: Long,
         @PathVariable reviewId: Long,
@@ -33,7 +33,7 @@ class ReviewController(
 
 
     //댓글 수정
-    @PatchMapping
+    @PatchMapping("/{reviewId}")
     fun updateReview(
         @PathVariable productId: Long,
         @PathVariable reviewId: Long,
@@ -43,7 +43,7 @@ class ReviewController(
     }
 
     //댓글 삭제
-    @DeleteMapping
+    @DeleteMapping("/{reviewId}")
     fun deleteReview(
         @PathVariable productId: Long,
         @PathVariable reviewId: Long,

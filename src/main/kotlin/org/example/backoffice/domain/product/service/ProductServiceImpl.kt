@@ -8,6 +8,8 @@ import org.example.backoffice.domain.product.model.Product
 import org.example.backoffice.domain.product.model.toResponse
 import org.example.backoffice.domain.product.repository.CategoryRepository
 import org.example.backoffice.domain.product.repository.ProductRepository
+import org.example.backoffice.domain.review.model.Review
+import org.example.backoffice.domain.review.repository.ReviewRepository
 import org.example.backoffice.domain.user.model.User
 import org.example.backoffice.domain.user.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
@@ -19,7 +21,8 @@ import java.nio.file.AccessDeniedException
 class ProductServiceImpl(
     private val productRepository: ProductRepository,
     private val categoryRepository: CategoryRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val reviewRepository: ReviewRepository
 ) : ProductService {
     override fun getProduct(): List<ProductResponse> {
         val products = productRepository.findAll()
@@ -30,6 +33,9 @@ class ProductServiceImpl(
     override fun getProductById(productId: Long): ProductResponse {
         val product =
             productRepository.findByIdOrNull(productId) ?: throw ModelNotFoundException("Product", productId)
+
+        val review: List<Review> = reviewRepository.findByProductId(productId)
+        product.review.addAll(review)
         return product.toResponse()
     }
 
