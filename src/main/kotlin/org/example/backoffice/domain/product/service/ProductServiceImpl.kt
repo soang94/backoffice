@@ -14,6 +14,7 @@ import org.example.backoffice.domain.user.model.User
 import org.example.backoffice.domain.user.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.nio.file.AccessDeniedException
 
 
@@ -55,6 +56,7 @@ class ProductServiceImpl(
         return createdProduct.toResponse()
     }
 
+    @Transactional
     override fun updateProduct(productId: Long, userId: Long, request: ProductCreateRequest): ProductResponse {
         val product =
             productRepository.findByIdOrNull(productId) ?: throw ModelNotFoundException("product", productId)
@@ -72,6 +74,7 @@ class ProductServiceImpl(
         return updateProduct.toResponse()
     }
 
+    @Transactional
     override fun deleteProduct(productId: Long, userId: Long) {
         val product = productRepository.findByIdOrNull(productId) ?: throw ModelNotFoundException("product", productId)
         if (product.user.id != userId) {

@@ -8,6 +8,7 @@ import org.example.backoffice.domain.product.model.toResponse
 import org.example.backoffice.domain.product.repository.CategoryRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 
 @Service
@@ -30,6 +31,7 @@ class CategoryServiceImpl(
         }
     }
 
+    @Transactional
     override fun updateCategory(categoryId: Long, request: CategoryCreateRequest): CategoryResponse {
         val category =
             categoryRepository.findByIdOrNull(categoryId) ?: throw ModelNotFoundException("category", categoryId)
