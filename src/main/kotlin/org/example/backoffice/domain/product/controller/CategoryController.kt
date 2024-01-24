@@ -23,13 +23,14 @@ class CategoryController (private val categoryService: CategoryService){
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     fun createCategory (
         @RequestBody categoryCreateRequest: CategoryCreateRequest
     ): ResponseEntity<CategoryResponse> {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.createCategory(categoryCreateRequest))
     }
 
-    @PatchMapping("/categoryId")
+    @PatchMapping("/{categoryId}")
     @PreAuthorize("hasRole('ADMIN')")
     fun updateCategory(
         @PathVariable categoryId: Long,

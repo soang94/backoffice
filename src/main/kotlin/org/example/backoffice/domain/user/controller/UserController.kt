@@ -1,11 +1,13 @@
 package org.example.backoffice.domain.user.controller
 
 import io.swagger.v3.oas.annotations.Operation
+import org.example.backoffice.common.security.jwt.UserPrincipal
 import org.example.backoffice.domain.user.dto.*
 import org.example.backoffice.domain.user.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -28,10 +30,11 @@ class UserController(
     }
 
     @Operation(summary = "user 단건 조회, user profile")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MEMBER')")
+    @PreAuthorize("hasRole('ADMIN') or #userPrincipal.id == #userId")
     @GetMapping("/users/{userId}")
     fun user(
-        @PathVariable userId: Long
+        @PathVariable userId: Long,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<UserResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
@@ -39,10 +42,12 @@ class UserController(
     }
 
     @Operation(summary = "user profile 수정")
+    @PreAuthorize("#userPrincipal.id == #userId")
     @PutMapping("/users/{userId}")
     fun updateProfile(
         @PathVariable userId: Long,
-        @RequestBody updateProfileRequest: UpdateProfileRequest
+        @RequestBody updateProfileRequest: UpdateProfileRequest,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<UserResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)

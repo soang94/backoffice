@@ -23,19 +23,7 @@ class ProductServiceImpl(
 ) : ProductService {
     override fun getProduct(): List<ProductResponse> {
         val products = productRepository.findAll()
-        return products.map { product ->
-            ProductResponse(
-                id = product.id,
-                userId = product.user.id,
-                name = product.name,
-                price = product.price,
-                title = product.title,
-                info = product.info,
-                categoryId = product.category.id!!,
-                createdAt = product.createdAt,
-                updatedAt = product.updatedAt
-            )
-        }
+        return products.map { it.toResponse() }
 
     }
 
