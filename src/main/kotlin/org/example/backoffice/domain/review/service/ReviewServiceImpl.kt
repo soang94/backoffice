@@ -1,5 +1,6 @@
 package org.example.backoffice.domain.review.service
 
+import org.example.backoffice.domain.product.repository.ProductRepository
 import org.example.backoffice.domain.review.dto.ReviewRequest
 import org.example.backoffice.domain.review.dto.ReviewResponse
 import org.example.backoffice.domain.review.dto.DeleteReviewRequest
@@ -12,7 +13,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ReviewServiceImpl(
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    private val productRepository: ProductRepository
 ) : ReviewService {
 
     //댓글 단건 조회
@@ -25,11 +27,13 @@ class ReviewServiceImpl(
 
     //댓글 작성
     override fun createReview(productId: Long, request: ReviewRequest): ReviewResponse {
+        val product = productRepository.getReferenceById(productId)
         val createReview = reviewRepository.save(
             Review(
                 name = request.name,
                 content = request.content,
-                password = request.password
+                password = request.password,
+                product = product
             )
         )
         return createReview .toResponse()
