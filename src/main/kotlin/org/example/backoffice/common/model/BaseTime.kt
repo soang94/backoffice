@@ -18,7 +18,7 @@ abstract class BaseTime {
         protected set
 
     @LastModifiedDate
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     var updatedAt: LocalDateTime = LocalDateTime.now()
         protected set
 }

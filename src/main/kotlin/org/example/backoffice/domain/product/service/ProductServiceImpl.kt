@@ -51,10 +51,10 @@ class ProductServiceImpl(
         val createdProduct = productRepository.save(
             Product(
                 user = user,
-                name = request.name,
-                price = request.price,
-                title = request.title,
-                info = request.info,
+                name = request.name!!,
+                price = request.price!!,
+                title = request.title!!,
+                info = request.info!!,
                 category = category
             )
         )
@@ -64,6 +64,7 @@ class ProductServiceImpl(
     override fun updateProduct(productId: Long, userId: Long, request: ProductCreateRequest): ProductResponse {
         val product =
             productRepository.findByIdOrNull(productId) ?: throw ModelNotFoundException("product", productId)
+        val category = categoryRepository.findByIdOrNull(request.categoryId)
         if (product.user.id != userId) {
             throw AccessDeniedException("User with ID $userId does not have permission to update post with ID $productId")
         }
@@ -71,7 +72,7 @@ class ProductServiceImpl(
         product.price =request.price ?: product.price
         product.title = request.title ?: product.title
         product.info = request.info ?: product.info
-        product.category = product.category ?: product.category
+        product.category = category ?: product.category
         val updateProduct = productRepository.save(product)
 
         return updateProduct.toResponse()
