@@ -30,8 +30,8 @@ class ReviewServiceImpl(
         val product = productRepository.getReferenceById(productId)
         val createReview = reviewRepository.save(
             Review(
-                name = request.name,
-                content = request.content,
+                name = request.name!!,
+                content = request.content!!,
                 password = request.password,
                 product = product
             )
@@ -46,15 +46,15 @@ class ReviewServiceImpl(
             reviewRepository.findByIdOrNull(reviewId) ?: throw IllegalStateException("알맞은 데이터가 없습니다.다시 시도해주세요")
 
 
-//        if (review.password != request.password)
-//            throw IllegalStateException("맞지 않는 비밀번호입니다. 다시 시도해주세요")
-//        else {
-            review.name = request.name
-            review.content = request.content
+        if (review.password != request.password)
+            throw IllegalStateException("맞지 않는 비밀번호입니다. 다시 시도해주세요")
+        else {
+            review.name = request.name ?:review.name
+            review.content = request.content ?: review.content
             reviewRepository.save(review)
 
             return review.toResponse()
-//        }
+        }
     }
 
     //댓글 삭제
@@ -64,12 +64,12 @@ class ReviewServiceImpl(
         val review =
             reviewRepository.findByIdOrNull(reviewId) ?: throw IllegalStateException("알맞은 데이터가 없습니다.다시시도해주세요")
 
-//        if (review.password != request.password)
-//            throw IllegalStateException("맞지 않는 비밀번호입니다. 다시 시도해주세요")
-//        else {
+        if (review.password != request.password)
+            throw IllegalStateException("맞지 않는 비밀번호입니다. 다시 시도해주세요")
+        else {
             reviewRepository.delete(review)
-//            reviewRepository.save(review)
-//        }
+            reviewRepository.save(review)
+        }
 
     }
 }
