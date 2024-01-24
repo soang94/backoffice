@@ -56,7 +56,7 @@ class UserServiceImpl(
                 password = passwordEncoder.encode(request.password),
                 name = request.name,
                 nickname = request.nickname,
-                birthDate = request.birthDate.toString(),
+                birthdate = request.birthdate.toString(),
                 info = request.info,
                 role = when (request.role) {
                     "ADMIN" -> UserRole.ADMIN

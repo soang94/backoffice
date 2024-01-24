@@ -8,7 +8,7 @@ data class UserResponse (
     val name: String,
     val nickname: String,
     val info: String,
-    val birthDate: String,
+    val birthdate: String,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
     val role: String,

@@ -39,8 +39,8 @@ data class SighUpRequest(
         regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$",
         message = "날짜형식(YYYY-MM-DD)을 확인해주세요"
     )
-    @JsonProperty("birthDate")
-    private val _birthDate: String?,
+    @JsonProperty("birthdate")
+    private val _birthdate: String?,
 
     val info: String,
     val role: String,
@@ -52,8 +52,8 @@ data class SighUpRequest(
     val nickname: String
         get() = _nickname!!
 
-    val birthDate: LocalDate
-        get() = _birthDate!!.toLocalDate()
+    val birthdate: LocalDate
+        get() = _birthdate!!.toLocalDate()
 
     private fun String.toLocalDate(): LocalDate =
         LocalDate.parse(this, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
