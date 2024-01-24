@@ -8,7 +8,7 @@ interface OrderService {
 
     fun getOrderById(orderId: Long): OrderResponse
 
-    fun createOrder(request: CreateOrderRequest): OrderResponse
+    fun createOrder(productId: Long, request: CreateOrderRequest, userId: Long): OrderResponse
 
     fun deleteOrder(orderId: Long)
 }

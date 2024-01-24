@@ -24,8 +24,8 @@ data class SighUpRequest(
 
     @field: NotBlank
     @field: Pattern(
-        regexp = "^([a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{4,10}\$",
-        message = "영문, 숫자를 포함한 4~10자리로 입력해주세요"
+        regexp = "^([a-z])(?=.*[0-9])[a-z0-9]{4,10}\$",
+        message = "소문자 영문, 숫자를 포함한 4~10자리로 입력해주세요"
     )
     @JsonProperty("nickname")
     private val _nickname: String?,
