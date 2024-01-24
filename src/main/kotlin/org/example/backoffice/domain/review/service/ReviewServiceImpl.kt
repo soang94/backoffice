@@ -36,7 +36,7 @@ class ReviewServiceImpl(
                 product = product
             )
         )
-        return createReview .toResponse()
+        return createReview.toResponse()
     }
 
     //댓글 수정
@@ -60,6 +60,7 @@ class ReviewServiceImpl(
     //댓글 삭제
     @Transactional
     override fun deleteReview(productId: Long, reviewId: Long, request: DeleteReviewRequest) {
+        val product = productRepository.findByIdOrNull(productId) ?:throw IllegalStateException("알맞은 데이터가 없습니다.다시시도해주세요")
         val review =
             reviewRepository.findByIdOrNull(reviewId) ?: throw IllegalStateException("알맞은 데이터가 없습니다.다시시도해주세요")
 
