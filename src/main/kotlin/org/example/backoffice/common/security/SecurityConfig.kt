@@ -32,6 +32,7 @@ class SecurityConfig(
                     "/signup",
                     "/products",
                     "/products/{productId}",
+                    "/categories",
                     "/swagger-ui/**",
                     "/v3/api-docs/**"
                 ).permitAll()

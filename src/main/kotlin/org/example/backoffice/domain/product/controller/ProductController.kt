@@ -1,5 +1,6 @@
 package org.example.backoffice.domain.product.controller
 
+import io.swagger.v3.oas.annotations.Operation
 import org.example.backoffice.common.security.jwt.UserPrincipal
 import org.example.backoffice.domain.product.dto.ProductCreateRequest
 import org.example.backoffice.domain.product.dto.ProductResponse
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/products")
 @RestController
 class ProductController (private val productService: ProductService){
+
+
     @GetMapping
     fun getProduct(): ResponseEntity<List<ProductResponse>>{
         return ResponseEntity.status(HttpStatus.OK).body(productService.getProduct())
@@ -23,7 +26,7 @@ class ProductController (private val productService: ProductService){
         return ResponseEntity.status(HttpStatus.OK).body(productService.getProductById(productId))
     }
 
-    @PostMapping("/new")
+    @PostMapping
     fun createProduct (@AuthenticationPrincipal userPrincipal: UserPrincipal ,@RequestBody productCreateRequest: ProductCreateRequest
     ): ResponseEntity<ProductResponse>{
         val userId =  userPrincipal.id

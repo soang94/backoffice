@@ -26,13 +26,7 @@ class CategoryServiceImpl(
 
     override fun getCategory(): List<CategoryResponse> {
         val categories = categoryRepository.findAll()
-        return categories.map { category ->
-            CategoryResponse(
-                id = category.id,
-                name = category.name,
-                info = category.info,
-                createdAt = category.createdAt
-            )
+        return categories.map { it.toResponse()
         }
     }
 
