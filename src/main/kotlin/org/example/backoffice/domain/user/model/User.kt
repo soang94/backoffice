@@ -1,6 +1,8 @@
 package org.example.backoffice.domain.user.model
 
 import jakarta.persistence.*
+import org.example.backoffice.common.exception.EmailAlreadyExistException
+import org.example.backoffice.common.exception.NicknameAlreadyExistException
 import org.example.backoffice.common.model.BaseTime
 import org.example.backoffice.domain.user.dto.UpdateProfileRequest
 import org.example.backoffice.domain.user.dto.UserResponse
@@ -59,11 +61,11 @@ fun User.toResponse(): UserResponse {
 
 fun checkedEmailOrNicknameExists(email: String, nickname: String, userRepository: UserRepository) {
     if (userRepository.existsByEmail(email)) {
-        throw IllegalArgumentException("이미 사용 중인 이메일입니다.")
+        throw EmailAlreadyExistException(email)
     }
 
     if (userRepository.existsByNickname(nickname)) {
-        throw IllegalArgumentException("이미 사용 중인 닉네임입니다.")
+        throw NicknameAlreadyExistException(nickname)
     }
 }
 

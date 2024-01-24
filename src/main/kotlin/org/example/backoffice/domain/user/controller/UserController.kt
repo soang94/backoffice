@@ -5,6 +5,7 @@ import jakarta.validation.Valid
 import org.example.backoffice.common.security.jwt.UserPrincipal
 import org.example.backoffice.domain.user.dto.*
 import org.example.backoffice.domain.user.service.UserService
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class UserController(
-    private val userService: UserService
+    private val userService: UserService,
 ) {
 
     @Operation(summary = "user 목록 전체 조회")
@@ -58,11 +59,15 @@ class UserController(
     @Operation(summary = "로그인")
     @PostMapping("/login")
     fun login(
-        @Valid @RequestBody loginRequest: LoginRequest
-    ): ResponseEntity<LoginResponse> {
+        @RequestBody loginRequest: LoginRequest
+    ): ResponseEntity<Any> {
+        val userDetails = userService.login(loginRequest)
+        val headers = HttpHeaders()
+        headers.add(HttpHeaders.AUTHORIZATION, userDetails.accessToken)
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(userService.login(loginRequest))
+            .headers(headers)
+            .body("로그인에 성공했습니다! accessToken = ${userDetails.accessToken}")
     }
 
     @Operation(summary = "회원 가입")
