@@ -1,6 +1,7 @@
 package org.example.backoffice.domain.product.service
 
 import org.example.backoffice.common.exception.ModelNotFoundException
+import org.example.backoffice.common.exception.NotHavePermissionException
 import org.example.backoffice.domain.like.repository.LikeRepository
 import org.example.backoffice.domain.product.dto.ProductCreateRequest
 import org.example.backoffice.domain.product.dto.ProductResponse
@@ -73,7 +74,7 @@ class ProductServiceImpl(
             productRepository.findByIdOrNull(productId) ?: throw ModelNotFoundException("product", productId)
         val category = categoryRepository.findByIdOrNull(request.categoryId)
         if (product.user.id != userId) {
-            throw AccessDeniedException("User with ID $userId does not have permission to update post with ID $productId")
+            throw NotHavePermissionException(userId, productId)
         }
         product.name = request.name ?: product.name
         product.price = request.price ?: product.price
@@ -92,7 +93,7 @@ class ProductServiceImpl(
     override fun deleteProduct(productId: Long, userId: Long) {
         val product = productRepository.findByIdOrNull(productId) ?: throw ModelNotFoundException("product", productId)
         if (product.user.id != userId) {
-            throw AccessDeniedException("User with ID $userId does not have permission to update post with ID $productId")
+            throw NotHavePermissionException(userId, productId)
         }
         productRepository.delete(product)
     }

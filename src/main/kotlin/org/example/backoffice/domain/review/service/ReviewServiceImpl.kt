@@ -1,5 +1,6 @@
 package org.example.backoffice.domain.review.service
 
+import org.example.backoffice.common.exception.InvalidPasswordException
 import org.example.backoffice.common.exception.ModelNotFoundException
 import org.example.backoffice.domain.product.repository.ProductRepository
 import org.example.backoffice.domain.review.dto.ReviewRequest
@@ -21,7 +22,7 @@ class ReviewServiceImpl(
     //댓글 단건 조회
     override fun getReview(productId: Long, reviewId: Long): ReviewResponse {
         val review =
-            reviewRepository.findByIdOrNull(reviewId) ?: throw IllegalStateException("알맞은 데이터가 없습니다.다시시도해주세요")
+            reviewRepository.findByIdOrNull(reviewId) ?: throw ModelNotFoundException("Review", reviewId)
         return review.toResponse()
     }
 
@@ -44,11 +45,11 @@ class ReviewServiceImpl(
     @Transactional
     override fun updateReview(productId: Long, reviewId: Long, request: ReviewRequest): ReviewResponse {
         val review =
-            reviewRepository.findByIdOrNull(reviewId) ?: throw IllegalStateException("알맞은 데이터가 없습니다.다시 시도해주세요")
+            reviewRepository.findByIdOrNull(reviewId) ?: throw ModelNotFoundException("Review", reviewId)
 
 
         if (review.password != request.password)
-            throw IllegalStateException("맞지 않는 비밀번호입니다. 다시 시도해주세요")
+            throw InvalidPasswordException(request.password)
         else {
             review.name = request.name ?: review.name
             review.content = request.content ?: review.content
@@ -62,12 +63,12 @@ class ReviewServiceImpl(
     @Transactional
     override fun deleteReview(productId: Long, reviewId: Long, request: DeleteReviewRequest) {
         val product =
-            productRepository.findByIdOrNull(productId) ?: throw IllegalStateException("알맞은 데이터가 없습니다.다시시도해주세요")
+            productRepository.findByIdOrNull(productId) ?: throw ModelNotFoundException("Product", productId)
         val review =
-            reviewRepository.findByIdOrNull(reviewId) ?: throw IllegalStateException("알맞은 데이터가 없습니다.다시시도해주세요")
+            reviewRepository.findByIdOrNull(reviewId) ?: throw ModelNotFoundException("Review", reviewId)
 
         if (review.password != request.password)
-            throw IllegalStateException("맞지 않는 비밀번호입니다. 다시 시도해주세요")
+            throw InvalidPasswordException(request.password)
         else {
             reviewRepository.delete(review)
             reviewRepository.save(review)

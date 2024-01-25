@@ -36,4 +36,26 @@ class GlobalExceptionHandler {
             .status(HttpStatus.BAD_REQUEST)
             .body(ErrorResponse(e.message))
     }
+
+    @ExceptionHandler(NotHavePermissionException::class)
+    fun handleNotHavePermissionException(e: NotHavePermissionException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(ErrorResponse(e.message))
+    }
+
+    @ExceptionHandler(InvalidPasswordException::class)
+    fun handleInvalidPasswordException(e: InvalidPasswordException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(ErrorResponse(e.message))
+    }
+
+    @ExceptionHandler(InvalidRoleException::class)
+    fun handleInvalidRoleException(e: InvalidRoleException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(ErrorResponse(e.message))
+    }
+
 }

@@ -2,6 +2,7 @@ package org.example.backoffice.domain.order.service
 
 import jakarta.transaction.Transactional
 import org.example.backoffice.common.exception.ModelNotFoundException
+import org.example.backoffice.common.exception.NotHavePermissionException
 import org.example.backoffice.domain.order.dto.CreateOrderRequest
 import org.example.backoffice.domain.order.dto.OrderResponse
 import org.example.backoffice.domain.order.model.Order
@@ -69,7 +70,7 @@ class OrderServiceImpl(
     override fun deleteOrder(orderId: Long, userId: Long) {
         val order = orderRepository.findByIdOrNull(orderId) ?: throw ModelNotFoundException("Order", orderId)
         if (order.user.id != userId) {
-            throw AccessDeniedException("User with ID $userId does not have permission to delete order with ID $orderId")
+            throw NotHavePermissionException(userId, orderId)
         }
         orderRepository.delete(order)
     }

@@ -1,5 +1,6 @@
 package org.example.backoffice.domain.user.service
 
+import org.example.backoffice.common.exception.InvalidRoleException
 import org.example.backoffice.common.exception.ModelNotFoundException
 import org.example.backoffice.common.security.jwt.JwtPlugin
 import org.example.backoffice.domain.user.dto.*
@@ -63,7 +64,7 @@ class UserServiceImpl(
                 role = when (request.role) {
                     "ADMIN" -> UserRole.ADMIN
                     "MEMBER" -> UserRole.MEMBER
-                    else -> throw IllegalArgumentException("Invalid role")
+                    else -> throw InvalidRoleException(request.role)
                 }
             )
         ).toResponse()
