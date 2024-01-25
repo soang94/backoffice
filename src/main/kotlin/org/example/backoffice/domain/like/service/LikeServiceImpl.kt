@@ -22,11 +22,11 @@ class LikeServiceImpl(
     private val userRepository: UserRepository,
 ) : LikeService {
     @Transactional
-    override fun LikeProduct(productId: Long, userId: Long): LikeResponse {
+    override fun likeProduct(productId: Long, userId: Long): LikeResponse {
         val product: Product =
             productRepository.findByIdOrNull(productId) ?: throw ModelNotFoundException("Product", productId)
         val user: User = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
-        var existingLike = likeRepository.findByProductIdAndUserId(productId, userId)
+        val existingLike = likeRepository.findByProductIdAndUserId(productId, userId)
         val productUserId = product.user.id
         return if (existingLike == null) {
             val liking = likeRepository.save(Like(product = product, user = user, likes = true))
