@@ -2,7 +2,6 @@ package org.example.backoffice.domain.order.service
 
 import jakarta.transaction.Transactional
 import org.example.backoffice.common.exception.ModelNotFoundException
-import org.example.backoffice.common.exception.NotHavePermissionException
 import org.example.backoffice.domain.order.dto.CreateOrderRequest
 import org.example.backoffice.domain.order.dto.OrderResponse
 import org.example.backoffice.domain.order.model.Order
@@ -12,7 +11,6 @@ import org.example.backoffice.domain.product.repository.ProductRepository
 import org.example.backoffice.domain.user.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import java.nio.file.AccessDeniedException
 
 @Service
 class OrderServiceImpl(
@@ -67,11 +65,7 @@ class OrderServiceImpl(
 
 
     @Transactional
-    override fun deleteOrder(orderId: Long, userId: Long) {
-        val order = orderRepository.findByIdOrNull(orderId) ?: throw ModelNotFoundException("Order", orderId)
-        if (order.user.id != userId) {
-            throw NotHavePermissionException(userId, orderId)
-        }
-        orderRepository.delete(order)
+    override fun deleteOrder(orderId: Long) {
+        TODO()
     }
 }

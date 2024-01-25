@@ -27,7 +27,7 @@ class OrderController(
             .body(orderService.getOrderById(orderId))
     }
 
-    @GetMapping
+    @GetMapping()
     fun getOrderList() : ResponseEntity<List<OrderResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
@@ -46,10 +46,7 @@ class OrderController(
     }
 
     @DeleteMapping("/{orderId}")
-    fun deleteOrder(@PathVariable orderId: Long, @AuthenticationPrincipal userPrincipal: UserPrincipal):
-            ResponseEntity<Unit> {
-        val userId = userPrincipal.id
-        orderService.deleteOrder(orderId, userId)
+    fun deleteOrder(@PathVariable orderId: Long): ResponseEntity<Unit> {
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build()
