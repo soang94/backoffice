@@ -1,6 +1,7 @@
 package org.example.backoffice.domain.product.service
 
 import org.example.backoffice.common.exception.ModelNotFoundException
+import org.example.backoffice.domain.like.repository.LikeRepository
 import org.example.backoffice.domain.product.dto.ProductCreateRequest
 import org.example.backoffice.domain.product.dto.ProductResponse
 import org.example.backoffice.domain.product.model.Category
@@ -23,17 +24,23 @@ class ProductServiceImpl(
     private val productRepository: ProductRepository,
     private val categoryRepository: CategoryRepository,
     private val userRepository: UserRepository,
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    private val likeRepository: LikeRepository,
 ) : ProductService {
     override fun getProduct(): List<ProductResponse> {
-        val products = productRepository.findAll()
-        return products.map { it.toResponse() }
-
+        return productRepository.findAll().map { product ->
+            val countLiked = likeRepository.countByProductId(product.id!!)
+            product.countLiked = countLiked
+            product.toResponse()
+        }
     }
 
     override fun getProductById(productId: Long): ProductResponse {
         val product =
             productRepository.findByIdOrNull(productId) ?: throw ModelNotFoundException("Product", productId)
+
+        val countLiked = likeRepository.countByProductId(productId)
+        product.countLiked = countLiked
 
         val review: List<Review> = reviewRepository.findByProductId(productId)
         product.review.addAll(review)
@@ -42,7 +49,10 @@ class ProductServiceImpl(
 
     override fun createProduct(request: ProductCreateRequest, userId: Long): ProductResponse {
         val user: User = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
-        val category: Category = categoryRepository.findByIdOrNull(request.categoryId) ?: throw ModelNotFoundException("category", request.categoryId)
+        val category: Category = categoryRepository.findByIdOrNull(request.categoryId) ?: throw ModelNotFoundException(
+            "category",
+            request.categoryId
+        )
         val createdProduct = productRepository.save(
             Product(
                 user = user,
@@ -50,7 +60,8 @@ class ProductServiceImpl(
                 price = request.price!!,
                 title = request.title!!,
                 info = request.info!!,
-                category = category
+                category = category,
+                countLiked = 0
             )
         )
         return createdProduct.toResponse()
@@ -65,11 +76,14 @@ class ProductServiceImpl(
             throw AccessDeniedException("User with ID $userId does not have permission to update post with ID $productId")
         }
         product.name = request.name ?: product.name
-        product.price =request.price ?: product.price
+        product.price = request.price ?: product.price
         product.title = request.title ?: product.title
         product.info = request.info ?: product.info
         product.category = category ?: product.category
         val updateProduct = productRepository.save(product)
+
+        val countLiked = likeRepository.countByProductId(productId)
+        product.countLiked = countLiked
 
         return updateProduct.toResponse()
     }
