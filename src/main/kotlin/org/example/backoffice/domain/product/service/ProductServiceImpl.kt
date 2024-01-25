@@ -44,7 +44,7 @@ class ProductServiceImpl(
         product.countLiked = countLiked
 
         val review: List<Review> = reviewRepository.findByProductId(productId)
-        product.review.addAll(review)
+        product.reviews.addAll(review)
         return product.toResponse()
     }
 

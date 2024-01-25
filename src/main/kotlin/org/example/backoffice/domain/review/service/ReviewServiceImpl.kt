@@ -45,7 +45,7 @@ class ReviewServiceImpl(
     @Transactional
     override fun updateReview(productId: Long, reviewId: Long, request: ReviewRequest): ReviewResponse {
         val review =
-            reviewRepository.findByIdOrNull(reviewId) ?: throw ModelNotFoundException("Review", reviewId)
+            reviewRepository.findByProductIdAndId(productId ,reviewId) ?: throw ModelNotFoundException("Review", reviewId)
 
 
         if (review.password != request.password)
@@ -70,7 +70,7 @@ class ReviewServiceImpl(
         if (review.password != request.password)
             throw InvalidPasswordException(request.password)
         else {
-            reviewRepository.delete(review)
+            product.removeReview(review)
             reviewRepository.save(review)
         }
 

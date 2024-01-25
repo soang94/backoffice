@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface ReviewRepository : JpaRepository<Review, Long> {
     fun findByProductId(productId: Long): List<Review>
+
+    fun findByProductIdAndId(productId: Long, reviewId: Long): Review?
 }
