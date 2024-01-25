@@ -1,5 +1,6 @@
 package org.example.backoffice.domain.user.service
 
+import org.example.backoffice.common.exception.InvalidRoleException
 import org.example.backoffice.common.exception.ModelNotFoundException
 import org.example.backoffice.common.security.jwt.JwtPlugin
 import org.example.backoffice.domain.user.dto.*
@@ -11,6 +12,7 @@ import org.example.backoffice.domain.user.repository.UserRole
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserServiceImpl(
@@ -28,6 +30,7 @@ class UserServiceImpl(
         return user.toResponse()
     }
 
+    @Transactional
     override fun updateProfile(userId: Long, request: UpdateProfileRequest): UserResponse {
         val profile = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
         profile.toUpdate(request)
@@ -56,12 +59,12 @@ class UserServiceImpl(
                 password = passwordEncoder.encode(request.password),
                 name = request.name,
                 nickname = request.nickname,
-                birthdate = request.birthdate,
+                birthdate = request.birthdate.toString(),
                 info = request.info,
                 role = when (request.role) {
                     "ADMIN" -> UserRole.ADMIN
                     "MEMBER" -> UserRole.MEMBER
-                    else -> throw IllegalArgumentException("Invalid role")
+                    else -> throw InvalidRoleException(request.role)
                 }
             )
         ).toResponse()
