@@ -19,6 +19,7 @@ class ReviewController(
 
     //댓글 단건 조회
     @GetMapping("/{reviewId}")
+    @PreAuthorize("hasRole('ADMIN')")
     fun getReview(
         @PathVariable productId: Long,
         @PathVariable reviewId: Long,
@@ -28,6 +29,7 @@ class ReviewController(
 
     //댓글 작성
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MEMBER')")
     fun createReview(
         @PathVariable productId: Long,
         @RequestBody request: ReviewRequest
@@ -38,6 +40,7 @@ class ReviewController(
 
     //댓글 수정
     @PatchMapping("/{reviewId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MEMBER')")
     fun updateReview(
         @PathVariable productId: Long,
         @PathVariable reviewId: Long,

@@ -4,6 +4,7 @@ import jakarta.persistence.*
 import org.example.backoffice.common.model.BaseTime
 import org.example.backoffice.domain.product.model.Product
 import org.example.backoffice.domain.review.dto.ReviewResponse
+import org.example.backoffice.domain.user.model.User
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction
 import java.time.LocalDateTime
@@ -18,7 +19,8 @@ class Review(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    var product: Product
+    var product: Product,
+
 ):BaseTime() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

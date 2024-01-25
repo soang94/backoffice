@@ -35,7 +35,7 @@ class ReviewServiceImpl(
                 name = request.name!!,
                 content = request.content!!,
                 password = request.password,
-                product = product
+                product = product,
             )
         )
         return createReview.toResponse()
