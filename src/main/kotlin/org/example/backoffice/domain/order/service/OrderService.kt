@@ -10,5 +10,5 @@ interface OrderService {
 
     fun createOrder(productId: Long, request: CreateOrderRequest, userId: Long): OrderResponse
 
-    fun deleteOrder(orderId: Long)
+    fun deleteOrder(orderId: Long, userId: Long)
 }
