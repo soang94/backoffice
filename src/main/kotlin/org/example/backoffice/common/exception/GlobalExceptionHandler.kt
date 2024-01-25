@@ -58,4 +58,11 @@ class GlobalExceptionHandler {
             .body(ErrorResponse(e.message))
     }
 
+    @ExceptionHandler(WrongPasswordConfirmException::class)
+    fun handleWrongPasswordConfirmException(e: WrongPasswordConfirmException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(ErrorResponse(e.message))
+    }
+
 }

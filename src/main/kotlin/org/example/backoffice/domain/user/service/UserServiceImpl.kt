@@ -1,7 +1,10 @@
 package org.example.backoffice.domain.user.service
 
+import jakarta.validation.constraints.Max
+import org.example.backoffice.common.exception.InvalidPasswordException
 import org.example.backoffice.common.exception.InvalidRoleException
 import org.example.backoffice.common.exception.ModelNotFoundException
+import org.example.backoffice.common.exception.WrongPasswordConfirmException
 import org.example.backoffice.common.security.jwt.JwtPlugin
 import org.example.backoffice.domain.user.dto.*
 import org.example.backoffice.domain.user.model.User
@@ -33,10 +36,16 @@ class UserServiceImpl(
     @Transactional
     override fun updateProfile(userId: Long, request: UpdateProfileRequest): UserResponse {
         val profile = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
-        profile.toUpdate(request)
-        userRepository.save(profile)
-        return profile.toResponse()
+        if(request.password != request.passwordConfirm){
+            throw WrongPasswordConfirmException("입력하신 비밀번호와 비밀번호 확인이 맞지 않습니다. 다시 입력해주세요.")
+        }else {
+                profile.toUpdate(request)
+                userRepository.save(profile)
+                return profile.toResponse()
+
+        }
     }
+
 
     override fun login(request: LoginRequest): LoginResponse {
         val user = userRepository.findByEmail(request.email) ?: throw ModelNotFoundException("User", null)
