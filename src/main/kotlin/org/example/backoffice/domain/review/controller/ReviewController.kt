@@ -1,5 +1,6 @@
 package org.example.backoffice.domain.review.controller
 
+import io.swagger.v3.oas.annotations.Operation
 import org.example.backoffice.common.security.jwt.UserPrincipal
 import org.example.backoffice.domain.review.dto.DeleteReviewRequest
 import org.example.backoffice.domain.review.dto.ReviewRequest
@@ -17,7 +18,7 @@ class ReviewController(
     private val reviewService: ReviewService
 ) {
 
-    //댓글 단건 조회
+    @Operation(summary = "review 단건 조회")
     @GetMapping("/{reviewId}")
     @PreAuthorize("hasRole('ADMIN')")
     fun getReview(
@@ -27,7 +28,7 @@ class ReviewController(
         return ResponseEntity.status(HttpStatus.OK).body(reviewService.getReview(productId, reviewId))
     }
 
-    //댓글 작성
+    @Operation(summary = "review 작성")
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('MEMBER')")
     fun createReview(
@@ -38,7 +39,7 @@ class ReviewController(
     }
 
 
-    //댓글 수정
+    @Operation(summary = "review 수정")
     @PatchMapping("/{reviewId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MEMBER')")
     fun updateReview(
@@ -49,7 +50,7 @@ class ReviewController(
         return ResponseEntity.status(HttpStatus.OK).body(reviewService.updateReview(productId, reviewId, request))
     }
 
-    //댓글 삭제
+    @Operation(summary = "review 삭제")
     @DeleteMapping("/{reviewId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MEMBER')")
     fun deleteReview(

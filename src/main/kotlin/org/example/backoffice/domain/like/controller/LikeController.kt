@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 class LikeController(
     private val likeService: LikeService,
 ) {
+    @Operation(summary = "찜 하기")
     @PatchMapping("/{productId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MEMBER')")
     fun likeProduct(
