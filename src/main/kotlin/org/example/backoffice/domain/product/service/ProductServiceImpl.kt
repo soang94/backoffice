@@ -28,8 +28,8 @@ class ProductServiceImpl(
     private val likeRepository: LikeRepository,
 ) : ProductService {
     override fun getProduct(): List<ProductResponse> {
-        return productRepository.findAll().map {
-            product -> val countLiked = likeRepository.countByProductId(product.id!!)
+        return productRepository.findAll().map { product ->
+            val countLiked = likeRepository.countByProductId(product.id!!)
             product.countLiked = countLiked
             product.toResponse()
         }
@@ -49,7 +49,10 @@ class ProductServiceImpl(
 
     override fun createProduct(request: ProductCreateRequest, userId: Long): ProductResponse {
         val user: User = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
-        val category: Category = categoryRepository.findByIdOrNull(request.categoryId) ?: throw ModelNotFoundException("category", request.categoryId)
+        val category: Category = categoryRepository.findByIdOrNull(request.categoryId) ?: throw ModelNotFoundException(
+            "category",
+            request.categoryId
+        )
         val createdProduct = productRepository.save(
             Product(
                 user = user,
@@ -73,7 +76,7 @@ class ProductServiceImpl(
             throw AccessDeniedException("User with ID $userId does not have permission to update post with ID $productId")
         }
         product.name = request.name ?: product.name
-        product.price =request.price ?: product.price
+        product.price = request.price ?: product.price
         product.title = request.title ?: product.title
         product.info = request.info ?: product.info
         product.category = category ?: product.category

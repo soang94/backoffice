@@ -13,7 +13,7 @@ import org.hibernate.annotations.OnDeleteAction
 
 @Entity
 @Table(name = "product")
-class Product (
+class Product(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -42,7 +42,7 @@ class Product (
     val liked: List<Like> = mutableListOf(),
 
 
-    ): BaseTime(){
+    ) : BaseTime() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
@@ -52,7 +52,7 @@ class Product (
 //    }
 }
 
-fun Product.toResponse(): ProductResponse{
+fun Product.toResponse(): ProductResponse {
     return ProductResponse(
         id = id,
         userId = user.id!!,

@@ -9,7 +9,7 @@ import org.hibernate.annotations.OnDeleteAction
 
 @Entity
 @Table(name = "like_table")
-class Like (
+class Like(
     @ManyToOne
     @JoinColumn(name = "product_id")
     val product: Product?,
@@ -22,7 +22,7 @@ class Like (
     @OnDelete(action = OnDeleteAction.CASCADE)
     val user: User
 
-){
+) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null

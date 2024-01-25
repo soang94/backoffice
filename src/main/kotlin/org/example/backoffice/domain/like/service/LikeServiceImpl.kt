@@ -20,7 +20,7 @@ class LikeServiceImpl(
     private val likeRepository: LikeRepository,
     private val productRepository: ProductRepository,
     private val userRepository: UserRepository,
-):LikeService {
+) : LikeService {
     @Transactional
     override fun LikeProduct(productId: Long, userId: Long): LikeResponse {
         val product: Product =

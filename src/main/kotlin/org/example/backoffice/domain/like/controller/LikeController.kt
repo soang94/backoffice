@@ -22,8 +22,8 @@ class LikeController(
     fun LikeProduct(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable productId: Long
-    ) : ResponseEntity<LikeResponse> {
+    ): ResponseEntity<LikeResponse> {
         val userId = userPrincipal.id
-        return ResponseEntity.status(HttpStatus.OK).body(likeService.LikeProduct(productId,userId))
+        return ResponseEntity.status(HttpStatus.OK).body(likeService.LikeProduct(productId, userId))
     }
 }
