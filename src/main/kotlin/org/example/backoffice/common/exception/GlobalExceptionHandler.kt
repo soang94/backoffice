@@ -16,13 +16,6 @@ class GlobalExceptionHandler {
             .body(ErrorResponse(e.message))
     }
 
-    @ExceptionHandler(LikeException::class)
-    fun handleLikeException(e: LikeException): ResponseEntity<ErrorResponse> {
-        return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
-            .body(ErrorResponse(e.message))
-    }
-
     @ExceptionHandler(EmailAlreadyExistException::class)
     fun handleEmailAlreadyExistException(e: EmailAlreadyExistException): ResponseEntity<ErrorResponse> {
         return ResponseEntity
