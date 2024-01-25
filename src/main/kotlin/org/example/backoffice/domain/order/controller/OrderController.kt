@@ -31,7 +31,7 @@ class OrderController(
 
     @Operation(summary = "order 전체 조회")
     @GetMapping
-    fun getOrderList() : ResponseEntity<List<OrderResponse>> {
+    fun getOrderList(): ResponseEntity<List<OrderResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(orderService.getAllOrderList())
@@ -41,7 +41,8 @@ class OrderController(
     @PostMapping()
     fun createOrder(
         @RequestBody createOrderRequest: CreateOrderRequest,
-        @AuthenticationPrincipal userPrincipal: UserPrincipal)
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
+    )
             : ResponseEntity<OrderResponse> {
         val productId = createOrderRequest.productId
         val userId = userPrincipal.id

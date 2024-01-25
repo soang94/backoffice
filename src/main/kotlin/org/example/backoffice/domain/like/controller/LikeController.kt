@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation
 import org.example.backoffice.common.security.jwt.UserPrincipal
 import org.example.backoffice.domain.like.dto.LikeResponse
 import org.example.backoffice.domain.like.service.LikeService
-import org.example.backoffice.domain.product.service.ProductService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize

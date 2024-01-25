@@ -65,9 +65,9 @@ fun Product.toResponse(): ProductResponse {
         title = title,
         info = info,
         categoryId = category.id!!,
-        review = reviews.map { it.toResponse() },
         createdAt = this.createdAt,
         updatedAt = this.updatedAt,
-        countLiked = liked.size
+        countLiked = liked.size,
+        review = reviews.map { it.toResponse() },
     )
 }

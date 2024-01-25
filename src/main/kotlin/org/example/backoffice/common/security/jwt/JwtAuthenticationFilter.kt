@@ -12,7 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 @Component
 class JwtAuthenticationFilter(
     private val jwtPlugin: JwtPlugin
-): OncePerRequestFilter() {
+) : OncePerRequestFilter() {
 
     companion object {
         private val BEARER_PATTERN = Regex("^Bearer (.+?)$")
@@ -32,7 +32,7 @@ class JwtAuthenticationFilter(
                     val email = it.payload.get("email", String::class.java)
                     val role = it.payload.get("role", String::class.java)
 
-                    val principal = UserPrincipal (
+                    val principal = UserPrincipal(
                         id = userId,
                         email = email,
                         roles = setOf(role)

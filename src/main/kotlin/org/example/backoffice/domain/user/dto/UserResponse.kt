@@ -2,7 +2,7 @@ package org.example.backoffice.domain.user.dto
 
 import java.time.LocalDateTime
 
-data class UserResponse (
+data class UserResponse(
     val id: Long,
     val email: String,
     val name: String,

@@ -23,14 +23,14 @@ class Order(
     val quantity: Int
 
 
-    ) : BaseTime() {
+) : BaseTime() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 }
 
-fun Order.toResponse(): OrderResponse{
+fun Order.toResponse(): OrderResponse {
     return OrderResponse(
         category = product.category.name,
         createdAt = this.createdAt,
