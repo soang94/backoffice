@@ -19,7 +19,7 @@ class UserServiceImpl(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
     private val jwtPlugin: JwtPlugin
-): UserService {
+) : UserService {
     override fun userList(): List<UserResponse> {
         return userRepository.findAll().map { it.toResponse() }
     }
@@ -54,7 +54,7 @@ class UserServiceImpl(
         checkedEmailOrNicknameExists(request.email, request.nickname, userRepository)
 
         return userRepository.save(
-            User (
+            User(
                 email = request.email,
                 password = passwordEncoder.encode(request.password),
                 name = request.name,

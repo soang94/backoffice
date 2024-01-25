@@ -6,7 +6,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails
 class JwtAuthenticationToken(
     private val principal: UserPrincipal,
     details: WebAuthenticationDetails
-): AbstractAuthenticationToken(principal.authorities) {
+) : AbstractAuthenticationToken(principal.authorities) {
     init {
         super.setAuthenticated(true)
         super.setDetails(details)

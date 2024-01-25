@@ -30,7 +30,7 @@ class OrderServiceImpl(
                 price = order.product.price,
                 nickname = order.user.nickname,
                 name = order.user.name,
-                createdAt= order.createdAt,
+                createdAt = order.createdAt,
                 quantity = order.quantity
             )
         }
@@ -46,7 +46,7 @@ class OrderServiceImpl(
             price = order.product.price,
             nickname = order.user.nickname,
             name = order.user.name,
-            createdAt= order.createdAt,
+            createdAt = order.createdAt,
             quantity = order.quantity
         )
     }
@@ -56,12 +56,12 @@ class OrderServiceImpl(
         val product = productRepository.findByIdOrNull(productId) ?: throw ModelNotFoundException("Product", productId)
         val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
         val orders = orderRepository.save(
-                Order(
-                    product = product,
-                    user = user,
-                    quantity = request.quantity
-                )
+            Order(
+                product = product,
+                user = user,
+                quantity = request.quantity
             )
+        )
         return orders.toResponse()
     }
 

@@ -13,6 +13,7 @@ class ProductResponse(
     val categoryId: Long,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime?,
+    val countLiked: Int,
     var review: List<ReviewResponse>,
-    val countLiked: Int
+
 )

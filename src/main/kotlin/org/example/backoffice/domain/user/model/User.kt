@@ -10,30 +10,30 @@ import org.example.backoffice.domain.user.repository.UserRepository
 import org.example.backoffice.domain.user.repository.UserRole
 
 @Entity
-@Table(name="app_user")
-class User (
-    @Column(name = "email" )
+@Table(name = "app_user")
+class User(
+    @Column(name = "email")
     var email: String,
 
-    @Column(name = "password" )
+    @Column(name = "password")
     var password: String,
 
-    @Column(name = "name" )
+    @Column(name = "name")
     var name: String,
 
-    @Column(name = "birthdate" )
+    @Column(name = "birthdate")
     var birthdate: String,
 
-    @Column(name = "nickname" )
+    @Column(name = "nickname")
     var nickname: String,
 
-    @Column(name = "info" )
+    @Column(name = "info")
     var info: String,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     var role: UserRole
-):BaseTime(){
+) : BaseTime() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null

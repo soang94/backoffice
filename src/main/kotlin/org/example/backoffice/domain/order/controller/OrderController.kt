@@ -1,5 +1,6 @@
 package org.example.backoffice.domain.order.controller
 
+import io.swagger.v3.oas.annotations.Operation
 import org.example.backoffice.common.security.jwt.UserPrincipal
 import org.example.backoffice.domain.order.dto.CreateOrderRequest
 import org.example.backoffice.domain.order.dto.OrderResponse
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController
 class OrderController(
     private val orderService: OrderService
 ) {
+    @Operation(summary = "order 단건 조회")
     @GetMapping("/{orderId}")
     fun getOrder(@PathVariable orderId: Long): ResponseEntity<OrderResponse> {
         return ResponseEntity
@@ -27,16 +29,20 @@ class OrderController(
             .body(orderService.getOrderById(orderId))
     }
 
+    @Operation(summary = "order 전체 조회")
     @GetMapping
-    fun getOrderList() : ResponseEntity<List<OrderResponse>> {
+    fun getOrderList(): ResponseEntity<List<OrderResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(orderService.getAllOrderList())
     }
 
+    @Operation(summary = "order 생성")
     @PostMapping()
-    fun createOrder(@RequestBody createOrderRequest: CreateOrderRequest,
-                    @AuthenticationPrincipal userPrincipal: UserPrincipal)
+    fun createOrder(
+        @RequestBody createOrderRequest: CreateOrderRequest,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
+    )
             : ResponseEntity<OrderResponse> {
         val productId = createOrderRequest.productId
         val userId = userPrincipal.id
@@ -45,6 +51,7 @@ class OrderController(
             .body(orderService.createOrder(productId, createOrderRequest, userId))
     }
 
+    @Operation(summary = "order 삭제")
     @DeleteMapping("/{orderId}")
     fun deleteOrder(@PathVariable orderId: Long, @AuthenticationPrincipal userPrincipal: UserPrincipal):
             ResponseEntity<Unit> {
