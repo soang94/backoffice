@@ -11,6 +11,7 @@ import org.example.backoffice.domain.product.repository.ProductRepository
 import org.example.backoffice.domain.user.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import java.nio.file.AccessDeniedException
 
 @Service
 class OrderServiceImpl(
@@ -65,7 +66,11 @@ class OrderServiceImpl(
 
 
     @Transactional
-    override fun deleteOrder(orderId: Long) {
-        TODO()
+    override fun deleteOrder(orderId: Long, userId: Long) {
+        val order = orderRepository.findByIdOrNull(orderId) ?: throw ModelNotFoundException("Order", orderId)
+        if (order.user.id != userId) {
+            throw AccessDeniedException("User with ID $userId does not have permission to delete order with ID $orderId")
+        }
+        orderRepository.delete(order)
     }
 }
