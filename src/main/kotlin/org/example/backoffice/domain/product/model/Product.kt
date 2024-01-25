@@ -3,6 +3,7 @@ package org.example.backoffice.domain.product.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import org.example.backoffice.common.model.BaseTime
+import org.example.backoffice.domain.like.model.Like
 import org.example.backoffice.domain.product.dto.ProductResponse
 import org.example.backoffice.domain.review.model.Review
 import org.example.backoffice.domain.review.model.toResponse
@@ -26,16 +27,21 @@ class Product (
 
     @Column(name = "info") var info: String,
 
+    @Column(name = "count_liked") var countLiked: Long = 0,
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category")
     var category: Category,
 
     @JsonIgnore
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
-    val review: MutableList<Review> = mutableListOf()
+    val review: MutableList<Review> = mutableListOf(),
+
+    @OneToMany(mappedBy = "product", cascade = [CascadeType.REMOVE])
+    val liked: List<Like> = mutableListOf(),
 
 
-): BaseTime(){
+    ): BaseTime(){
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
@@ -56,6 +62,7 @@ fun Product.toResponse(): ProductResponse{
         categoryId = category.id!!,
         review = review.map { it.toResponse() },
         createdAt = this.createdAt,
-        updatedAt = this.updatedAt
+        updatedAt = this.updatedAt,
+        countLiked = liked.size
     )
 }
