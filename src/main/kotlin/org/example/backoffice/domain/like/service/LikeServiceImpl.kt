@@ -23,40 +23,26 @@ class LikeServiceImpl(
 ):LikeService {
     @Transactional
     override fun LikeProduct(productId: Long, userId: Long): LikeResponse {
-        //변수 선언
         val product: Product =
             productRepository.findByIdOrNull(productId) ?: throw ModelNotFoundException("Product", productId)
         val user: User = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
         var existingLike = likeRepository.findByProductIdAndUserId(productId, userId)
         val productUserId = product.user.id
-        //postId와 userId에 대해서 null 일때 newLike 로 좋아요 생성 , 그 후 countLikes를 플러스 해서 저장 liked 상태는 true
-//        return if (existingLike = null) {
-        val newLike = likeRepository.save(Like(product = product, user = user, likes = true))
-        if (productUserId != userId) {
-            product.countLiked++
-            productRepository.save(product)
-            newLike.toResponse()
-            //같을 경우 Exception
+        return if (existingLike == null) {
+            val liking = likeRepository.save(Like(product = product, user = user, likes = true))
+            if (productUserId != userId) {
+                product.countLiked++
+                productRepository.save(product)
+                liking.toResponse()
+            } else {
+                throw LikeException(productId, userId)
+            }
         } else {
-            throw LikeException(productId)
+            likeRepository.delete(existingLike)
+            product.countLiked--
+            productRepository.save(product)
+            existingLike.toResponse().copy(likes = false)
         }
-
-//        if(!likeRepository.existsLikeByProduct(product)){
-//            product.countLiked+1
-//            productRepository.save(product)
-//        }else {
-//            product.countLiked-1
-//            likeRepository.deleteLikeByProduct(product)
-//        }
-        //null 이 아닐시(존재할 경우), 삭제후 countLikes를 마이너스 해서 저장 liked 상태를 false 로
-//        } else {
-//            likeRepository.delete(existingLike)
-//            product.countLiked--
-//            productRepository.save(product)
-//            existingLike.toResponse().copy(liked = false)
-//        }
-        return newLike.toResponse()
     }
 }
-
 

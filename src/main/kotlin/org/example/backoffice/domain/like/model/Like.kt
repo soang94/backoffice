@@ -8,7 +8,7 @@ import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction
 
 @Entity
-@Table(name = "like")
+@Table(name = "like_table")
 class Like (
     @ManyToOne
     @JoinColumn(name = "product_id")

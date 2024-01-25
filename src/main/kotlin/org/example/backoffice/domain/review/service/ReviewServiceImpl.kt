@@ -1,5 +1,6 @@
 package org.example.backoffice.domain.review.service
 
+import org.example.backoffice.common.exception.ModelNotFoundException
 import org.example.backoffice.domain.product.repository.ProductRepository
 import org.example.backoffice.domain.review.dto.ReviewRequest
 import org.example.backoffice.domain.review.dto.ReviewResponse
@@ -27,7 +28,7 @@ class ReviewServiceImpl(
 
     //댓글 작성
     override fun createReview(productId: Long, request: ReviewRequest): ReviewResponse {
-        val product = productRepository.getReferenceById(productId)
+        val product = productRepository.findByIdOrNull(productId) ?: throw ModelNotFoundException("Product", productId)
         val createReview = reviewRepository.save(
             Review(
                 name = request.name!!,

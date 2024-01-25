@@ -37,6 +37,7 @@ class Product (
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     val review: MutableList<Review> = mutableListOf(),
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = [CascadeType.REMOVE])
     val liked: List<Like> = mutableListOf(),
 
