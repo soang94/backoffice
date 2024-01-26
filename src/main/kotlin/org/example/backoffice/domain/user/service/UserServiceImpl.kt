@@ -1,5 +1,6 @@
 package org.example.backoffice.domain.user.service
 
+import org.example.backoffice.common.exception.InvalidRoleException
 import org.example.backoffice.common.exception.ModelNotFoundException
 import org.example.backoffice.common.security.jwt.JwtPlugin
 import org.example.backoffice.domain.user.dto.*
@@ -18,7 +19,7 @@ class UserServiceImpl(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
     private val jwtPlugin: JwtPlugin
-): UserService {
+) : UserService {
     override fun userList(): List<UserResponse> {
         return userRepository.findAll().map { it.toResponse() }
     }
@@ -53,17 +54,17 @@ class UserServiceImpl(
         checkedEmailOrNicknameExists(request.email, request.nickname, userRepository)
 
         return userRepository.save(
-            User (
+            User(
                 email = request.email,
                 password = passwordEncoder.encode(request.password),
                 name = request.name,
                 nickname = request.nickname,
-                birthdate = request.birthdate,
+                birthdate = request.birthdate.toString(),
                 info = request.info,
                 role = when (request.role) {
                     "ADMIN" -> UserRole.ADMIN
                     "MEMBER" -> UserRole.MEMBER
-                    else -> throw IllegalArgumentException("Invalid role")
+                    else -> throw InvalidRoleException(request.role)
                 }
             )
         ).toResponse()

@@ -1,6 +1,8 @@
 package org.example.backoffice.domain.user.model
 
 import jakarta.persistence.*
+import org.example.backoffice.common.exception.EmailAlreadyExistException
+import org.example.backoffice.common.exception.NicknameAlreadyExistException
 import org.example.backoffice.common.model.BaseTime
 import org.example.backoffice.domain.user.dto.UpdateProfileRequest
 import org.example.backoffice.domain.user.dto.UserResponse
@@ -8,30 +10,30 @@ import org.example.backoffice.domain.user.repository.UserRepository
 import org.example.backoffice.domain.user.repository.UserRole
 
 @Entity
-@Table(name="app_user")
-class User (
-    @Column(name = "email" )
+@Table(name = "app_user")
+class User(
+    @Column(name = "email")
     var email: String,
 
-    @Column(name = "password" )
+    @Column(name = "password")
     var password: String,
 
-    @Column(name = "name" )
+    @Column(name = "name")
     var name: String,
 
-    @Column(name = "birthdate" )
+    @Column(name = "birthdate")
     var birthdate: String,
 
-    @Column(name = "nickname" )
+    @Column(name = "nickname")
     var nickname: String,
 
-    @Column(name = "info" )
+    @Column(name = "info")
     var info: String,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     var role: UserRole
-):BaseTime(){
+) : BaseTime() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
@@ -59,11 +61,11 @@ fun User.toResponse(): UserResponse {
 
 fun checkedEmailOrNicknameExists(email: String, nickname: String, userRepository: UserRepository) {
     if (userRepository.existsByEmail(email)) {
-        throw IllegalArgumentException("이미 사용 중인 이메일입니다.")
+        throw EmailAlreadyExistException(email)
     }
 
     if (userRepository.existsByNickname(nickname)) {
-        throw IllegalArgumentException("이미 사용 중인 닉네임입니다.")
+        throw NicknameAlreadyExistException(nickname)
     }
 }
 

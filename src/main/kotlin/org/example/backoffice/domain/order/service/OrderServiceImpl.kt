@@ -1,12 +1,10 @@
 package org.example.backoffice.domain.order.service
 
-import jakarta.transaction.Transactional
 import org.example.backoffice.common.exception.ModelNotFoundException
 import org.example.backoffice.domain.order.dto.CreateOrderRequest
 import org.example.backoffice.domain.order.dto.OrderResponse
 import org.example.backoffice.domain.order.model.Order
 import org.example.backoffice.domain.order.model.OrderDetail
-import org.example.backoffice.domain.order.repository.OrderDetailRepository
 import org.example.backoffice.domain.order.repository.OrderRepository
 import org.example.backoffice.domain.product.repository.ProductRepository
 import org.example.backoffice.domain.user.repository.UserRepository
@@ -17,7 +15,7 @@ import org.springframework.stereotype.Service
 class OrderServiceImpl(
     private val orderRepository: OrderRepository,
     private val productRepository: ProductRepository,
-    private val userRepository: UserRepository,
+    private val userRepository: UserRepository
 ) : OrderService {
     override fun createOrder(userId: Long): Order {
         val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
