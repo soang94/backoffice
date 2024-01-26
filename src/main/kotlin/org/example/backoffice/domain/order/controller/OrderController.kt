@@ -25,38 +25,17 @@ class OrderController(
         val userId = userPrincipal.id
 
         // 주문 생성
-        orderService.createOrder(userId)
+        val newOrder= orderService.createOrder(userId)
 
         // 주문 상세 정보 처리
-        val orderDetails = orderService.processProductDetails(createOrderRequest.products, userId)
+        val orderDetails = orderService.processProductDetails(createOrderRequest.products,userId,  newOrder.id!!)
 
         // 주문 응답 생성
-        val orderResponse = orderDetails.toOrderResponse()
+        val orderResponse = orderService.createOrderResponseFromOrderDetails(orderDetails)
 
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(orderResponse)
     }
 
-    // 주문을 OrderResponse로 변환하는 로컬 함수
-    private fun OrderDetail.toOrderResponse(): OrderResponse {
-        val productDetails = this.orderDetails.map { detail ->
-            OrderResponse.ProductDetail(
-                productId = detail.product.id,
-                category = detail.product.categoryId,
-                productName = detail.product.name,
-                quantity = detail.quantity,
-                pricePerUInt =  detail.product.price
-            )
-        }
-
-        return OrderResponse(
-            id = this.id,
-            products = productDetails,
-            totalPrice = productDetails.sumOf { it.pricePerUnit * it.quantity },
-            nickname = this.order.user.nickname,
-            name = this.order.user.name,
-            createdAt = this.createdAt
-        )
-    }
 }

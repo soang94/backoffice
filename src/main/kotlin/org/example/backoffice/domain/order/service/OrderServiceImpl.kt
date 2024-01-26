@@ -3,6 +3,7 @@ package org.example.backoffice.domain.order.service
 import jakarta.transaction.Transactional
 import org.example.backoffice.common.exception.ModelNotFoundException
 import org.example.backoffice.domain.order.dto.CreateOrderRequest
+import org.example.backoffice.domain.order.dto.OrderResponse
 import org.example.backoffice.domain.order.model.Order
 import org.example.backoffice.domain.order.model.OrderDetail
 import org.example.backoffice.domain.order.repository.OrderDetailRepository
@@ -30,11 +31,10 @@ class OrderServiceImpl(
     }
 
 
-    override fun processProductDetails(details: List<CreateOrderRequest.ProductDetail>, userId: Long): List<OrderDetail> {
+    override fun processProductDetails(details: List<CreateOrderRequest.ProductDetail>, userId: Long, newOrderId: Long): List<OrderDetail> {
         val productIds = details.map { it.productId }
         val products = productRepository.findAllById(productIds)
-        val latestOrder = orderRepository.findTopByUserIdOrderByOrderIdDesc(userId)
-            ?: throw IllegalStateException("No orders found for user with ID $userId")
+        val order = orderRepository.findByIdOrNull(newOrderId)?: throw ModelNotFoundException("order", newOrderId)
 
         val productMap = products.associateBy { it.id }
 
@@ -46,12 +46,43 @@ class OrderServiceImpl(
                 OrderDetail(
                     product = product,
                     quantity = detail.quantity,
-                    order = latestOrder
+                    order = order
                 )
             } else {
                 // 상품이 존재하지 않을 경우 예외를 발생시킵니다.
                 throw IllegalArgumentException("Product with ID ${detail.productId} not found")
             }
         }
+    }
+
+    override fun createOrderResponseFromOrderDetails(orderDetails: List<OrderDetail>): OrderResponse {
+        // Assuming that all OrderDetail objects belong to the same Order.
+        val orderId = orderDetails.first().order.id
+        val productDetails = orderDetails.map { detail ->
+            OrderResponse.ProductDetail(
+                productId = detail.product.id!!,
+                category = detail.product.category.id!!, // Assuming you have a 'category' field.
+                productName = detail.product.name,
+                quantity = detail.quantity,
+                pricePerUInt = detail.product.price
+            )
+        }
+
+        // Calculate the total price
+        val totalPrice = productDetails.sumOf { it.pricePerUInt * it.quantity }
+
+        // Assuming all OrderDetail objects have the same order, so we can take the user from the first.
+        val nickname = orderDetails.first().order.user.nickname // Assuming there is a 'nickname' field in the User model.
+        val name = orderDetails.first().order.user.name // Assuming there is a 'name' field in the User model.
+        val createdAt = orderDetails.first().order.createdAt // Assuming there is a 'createdAt' field in the Order model.
+
+        return OrderResponse(
+            id = orderId,
+            products = productDetails,
+            totalPrice = totalPrice,
+            nickname = nickname,
+            name = name,
+            createdAt = createdAt
+        )
     }
 }

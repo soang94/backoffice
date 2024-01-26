@@ -8,7 +8,9 @@ import org.example.backoffice.domain.order.model.OrderDetail
 interface OrderService {
 
     fun createOrder(userId: Long): Order
-    fun processProductDetails(details: List<CreateOrderRequest.ProductDetail>, userId: Long) : List<OrderDetail>
+    fun processProductDetails(details: List<CreateOrderRequest.ProductDetail>, userId: Long, newOrderId: Long) : List<OrderDetail>
+
+    fun createOrderResponseFromOrderDetails(orderDetails: List<OrderDetail>): OrderResponse
 
 
 
