@@ -26,8 +26,10 @@ class AdminController(
 
     @Operation(summary = "user 등급 변경")
     @PreAuthorize("hasRole('ADMIN')")
-    @PatchMapping("/users")
-    fun userChangeAdmin(userId: Long, request: AdminDTO): BaseResponse<AdminDTO> {
+    @PatchMapping("/users/{userId}")
+    fun userChangeAdmin(
+        @PathVariable userId: Long,
+        @RequestBody request: AdminDTO): BaseResponse<AdminDTO> {
         val resultMsg: String = userService.userChangeAdmin(userId,request)
         return BaseResponse(message = resultMsg)
     }
@@ -35,8 +37,8 @@ class AdminController(
 
     @Operation(summary = "user 삭제")
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/users")
-    fun deleteUser(userId: Long): ResponseEntity<Unit> {
+    @DeleteMapping("/users/{userId}")
+    fun deleteUser(@PathVariable userId: Long): ResponseEntity<Unit> {
         userService.deleteUser(userId)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
