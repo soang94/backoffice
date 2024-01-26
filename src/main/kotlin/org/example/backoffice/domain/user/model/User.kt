@@ -3,11 +3,13 @@ package org.example.backoffice.domain.user.model
 import jakarta.persistence.*
 import org.example.backoffice.common.exception.EmailAlreadyExistException
 import org.example.backoffice.common.exception.NicknameAlreadyExistException
+import org.example.backoffice.common.exception.PasswordMismatchException
 import org.example.backoffice.common.model.BaseTime
 import org.example.backoffice.domain.user.dto.UpdateProfileRequest
 import org.example.backoffice.domain.user.dto.UserResponse
 import org.example.backoffice.domain.user.repository.UserRepository
 import org.example.backoffice.domain.user.repository.UserRole
+import org.springframework.security.crypto.password.PasswordEncoder
 
 @Entity
 @Table(name = "app_user")
@@ -33,15 +35,17 @@ class User(
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     var role: UserRole
+
+
 ) : BaseTime() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
-    fun toUpdate(request: UpdateProfileRequest) {
+    fun toUpdate(request: UpdateProfileRequest, passwordEncoder: PasswordEncoder) {
         name = request.name
         info = request.info
-        password = request.password
+//        password = passwordEncoder.encode(request.password)
     }
 }
 
@@ -68,5 +72,7 @@ fun checkedEmailOrNicknameExists(email: String, nickname: String, userRepository
         throw NicknameAlreadyExistException(nickname)
     }
 }
+
+
 
 
