@@ -46,9 +46,9 @@ class UserController(
 
     @Operation(summary = "user 탈퇴")
     @PreAuthorize("#userPrincipal.id == #userId")
-    @DeleteMapping("/users")
+    @DeleteMapping("/users/{userId}")
     fun deleteMyUser(
-        userId: Long,
+        @PathVariable userId: Long,
         @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<Unit> {
         userService.deleteUser(userId)
