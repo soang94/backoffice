@@ -1,6 +1,7 @@
 package org.example.backoffice.domain.order.service
 
 import org.example.backoffice.common.exception.ModelNotFoundException
+import org.example.backoffice.common.exception.NotHavePermissionException
 import org.example.backoffice.domain.order.dto.CreateOrderRequest
 import org.example.backoffice.domain.order.dto.OrderResponse
 import org.example.backoffice.domain.order.model.Order
@@ -19,6 +20,39 @@ class OrderServiceImpl(
     private val userRepository: UserRepository,
     private val orderDetailRepository: OrderDetailRepository,
 ) : OrderService {
+    override fun getProductById(userId: Long): List<OrderResponse> {
+        val orders = orderRepository.findAllByUserId(userId)
+
+        return orders.map { order ->
+            // 각 주문에 대한 주문 상세 정보를 조회합니다.
+            val orderDetails = orderDetailRepository.findAllByOrderId(order.id!!)
+
+            // 주문 상세 정보를 OrderResponse.ProductDetail 객체로 변환합니다.
+            val productDetails = orderDetails.map { detail ->
+                OrderResponse.ProductDetail(
+                    productId = detail.product.id!!,
+                    category = detail.product.category.id!!, // 카테고리 ID를 가정
+                    productName = detail.product.name,
+                    quantity = detail.quantity,
+                    pricePerUInt = detail.product.price
+                )
+            }
+
+            // 주문에 대한 총 가격을 계산합니다.
+            val totalPrice = productDetails.sumOf { it.pricePerUInt * it.quantity }
+
+            // OrderResponse 객체를 생성합니다.
+            OrderResponse(
+                id = order.id,
+                products = productDetails,
+                totalPrice = totalPrice,
+                nickname = order.user.nickname, // 유저의 닉네임을 가정
+                name = order.user.name,        // 유저의 이름을 가정
+                createdAt = order.createdAt
+            )
+        }
+    }
+
     override fun createOrder(userId: Long): Order {
         val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
 
@@ -77,5 +111,13 @@ class OrderServiceImpl(
             name = name,
             createdAt = createdAt
         )
+    }
+
+    override fun deleteOrder(orderId: Long, userId: Long) {
+        val order = orderRepository.findByIdOrNull(orderId) ?: throw ModelNotFoundException("order", orderId)
+        if (order.user.id != userId){
+            throw NotHavePermissionException(userId, orderId)
+        }
+        orderRepository.delete(order)
     }
 }
