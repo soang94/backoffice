@@ -86,7 +86,7 @@ class UserController(
     @PatchMapping("/users/{userId}")
     fun changePassword(
         @PathVariable userId: Long,
-        @RequestBody changePasswordRequest: ChangePasswordRequest,
+        @Valid @RequestBody changePasswordRequest: ChangePasswordRequest,
         @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<Any> {
         return ResponseEntity
