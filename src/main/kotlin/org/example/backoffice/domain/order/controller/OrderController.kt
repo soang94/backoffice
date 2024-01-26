@@ -33,7 +33,7 @@ class OrderController(
         // 주문 생성
         val newOrder= orderService.createOrder(userId)
 
-        // 주문 상세 정보 처리
+        // 주문 상세 생성 저장
         val orderDetails = orderService.processProductDetails(createOrderRequest.products, userId,  newOrder.id!!)
 
         // 주문 응답 생성
