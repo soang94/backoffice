@@ -12,4 +12,6 @@ interface UserService {
     fun login(request: LoginRequest): LoginResponse
 
     fun signUp(request: SighUpRequest): UserResponse
+
+    fun changePassword(userId: Long, request: ChangePasswordRequest)
 }

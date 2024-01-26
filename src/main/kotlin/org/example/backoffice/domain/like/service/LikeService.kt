@@ -4,6 +4,4 @@ import org.example.backoffice.domain.like.dto.LikeResponse
 
 interface LikeService {
     fun likeProduct(productId: Long, userId: Long): LikeResponse
-
-    fun likeCheckProduct(userId: Long): List<LikeResponse>
 }

@@ -38,10 +38,8 @@ class OrderServiceImpl(
                 )
             }
 
-            // 주문에 대한 총 가격을 계산합니다.
             val totalPrice = productDetails.sumOf { it.pricePerUInt * it.quantity }
 
-            // OrderResponse 객체를 생성합니다.
             OrderResponse(
                 id = order.id,
                 products = productDetails,
