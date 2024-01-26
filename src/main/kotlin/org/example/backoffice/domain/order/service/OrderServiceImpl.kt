@@ -3,9 +3,9 @@ package org.example.backoffice.domain.order.service
 import jakarta.transaction.Transactional
 import org.example.backoffice.common.exception.ModelNotFoundException
 import org.example.backoffice.domain.order.dto.CreateOrderRequest
-import org.example.backoffice.domain.order.dto.OrderResponse
 import org.example.backoffice.domain.order.model.Order
-import org.example.backoffice.domain.order.model.toResponse
+import org.example.backoffice.domain.order.model.OrderDetail
+import org.example.backoffice.domain.order.repository.OrderDetailRepository
 import org.example.backoffice.domain.order.repository.OrderRepository
 import org.example.backoffice.domain.product.repository.ProductRepository
 import org.example.backoffice.domain.user.repository.UserRepository
@@ -16,56 +16,42 @@ import org.springframework.stereotype.Service
 class OrderServiceImpl(
     private val orderRepository: OrderRepository,
     private val productRepository: ProductRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : OrderService {
-    override fun getAllOrderList(): List<OrderResponse> {
-        val orders = orderRepository.findAll()
-        return orders.map { order ->
-            OrderResponse(
-                id = order.id!!,
-                productId = order.product.id,
-                category = order.product.category.name,
-                price = order.product.price,
-                nickname = order.user.nickname,
-                name = order.user.name,
-                createdAt= order.createdAt,
-                quantity = order.quantity
-            )
-        }
-    }
-
-    override fun getOrderById(orderId: Long): OrderResponse {
-        val order =
-            orderRepository.findByIdOrNull(orderId) ?: throw ModelNotFoundException("Order", orderId)
-        return OrderResponse(
-            id = order.id!!,
-            productId = order.product.id,
-            category = order.product.category.name,
-            price = order.product.price,
-            nickname = order.user.nickname,
-            name = order.user.name,
-            createdAt= order.createdAt,
-            quantity = order.quantity
-        )
-    }
-
-    override fun createOrder(productId: Long, request: CreateOrderRequest, userId: Long):
-            OrderResponse {
-        val product = productRepository.findByIdOrNull(productId) ?: throw ModelNotFoundException("Product", productId)
+    override fun createOrder(userId: Long): Order {
         val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
-        val orders = orderRepository.save(
-                Order(
-                    product = product,
-                    user = user,
-                    quantity = request.quantity
-                )
-            )
-        return orders.toResponse()
+
+        // 주문을 생성하고 저장합니다.
+        val order = Order(
+            user = user,
+            // 추가적인 주문 관련 정보를 설정할 수 있습니다.
+        )
+        return orderRepository.save(order)
     }
 
 
-    @Transactional
-    override fun deleteOrder(orderId: Long) {
-        TODO()
+    override fun processProductDetails(details: List<CreateOrderRequest.ProductDetail>, userId: Long): List<OrderDetail> {
+        val productIds = details.map { it.productId }
+        val products = productRepository.findAllById(productIds)
+        val latestOrder = orderRepository.findTopByUserIdOrderByOrderIdDesc(userId)
+            ?: throw IllegalStateException("No orders found for user with ID $userId")
+
+        val productMap = products.associateBy { it.id }
+
+        return details.map { detail ->
+            // Map에서 상품을 조회합니다.
+            val product = productMap[detail.productId]
+            if (product != null) {
+                // 상품이 존재하면 OrderDetail 객체를 생성합니다.
+                OrderDetail(
+                    product = product,
+                    quantity = detail.quantity,
+                    order = latestOrder
+                )
+            } else {
+                // 상품이 존재하지 않을 경우 예외를 발생시킵니다.
+                throw IllegalArgumentException("Product with ID ${detail.productId} not found")
+            }
+        }
     }
 }

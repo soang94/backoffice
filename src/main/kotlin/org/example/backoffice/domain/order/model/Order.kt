@@ -11,16 +11,9 @@ import org.example.backoffice.domain.user.model.User
 
 class Order(
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    val product: Product,
-
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     val user: User,
-
-    @Column
-    val quantity: Int
 
 
     ) : BaseTime() {
@@ -29,16 +22,23 @@ class Order(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 }
-
-fun Order.toResponse(): OrderResponse{
-    return OrderResponse(
-        category = product.category.name,
-        createdAt = this.createdAt,
-        id = id,
-        name = user.name,
-        nickname = user.nickname,
-        price = product.price * quantity,
-        productId = product.id,
-        quantity = quantity
-    )
-}
+//fun Order.toOrderResponse(): OrderResponse {
+//    val productDetails = this.orderDetails.map { detail ->
+//        OrderResponse.ProductDetail(
+//            productId = detail.product.id,
+//            category = detail.product.categoryId, // Assuming there is a categoryId in the Product
+//            productName = detail.product.name,
+//            quantity = detail.quantity,
+//            pricePerUInt = detail.product.price
+//        )
+//    }
+//
+//    return OrderResponse(
+//        id = this.id,
+//        products = productDetails,
+//        totalPrice = productDetails.sumOf { it.pricePerUnit * it.quantity },
+//        nickname = this.user.nickname, // Assuming there is a nickname in the User
+//        name = this.user.name,
+//        createdAt = this.createdAt
+//    )
+//}
