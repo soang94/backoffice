@@ -22,23 +22,5 @@ class Order(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 }
-//fun Order.toOrderResponse(): OrderResponse {
-//    val productDetails = this.orderDetails.map { detail ->
-//        OrderResponse.ProductDetail(
-//            productId = detail.product.id,
-//            category = detail.product.categoryId, // Assuming there is a categoryId in the Product
-//            productName = detail.product.name,
-//            quantity = detail.quantity,
-//            pricePerUInt = detail.product.price
-//        )
-//    }
-//
-//    return OrderResponse(
-//        id = this.id,
-//        products = productDetails,
-//        totalPrice = productDetails.sumOf { it.pricePerUnit * it.quantity },
-//        nickname = this.user.nickname, // Assuming there is a nickname in the User
-//        name = this.user.name,
-//        createdAt = this.createdAt
-//    )
-//}
+
+

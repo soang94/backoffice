@@ -24,14 +24,12 @@ class OrderServiceImpl(
         val orders = orderRepository.findAllByUserId(userId)
 
         return orders.map { order ->
-            // 각 주문에 대한 주문 상세 정보를 조회합니다.
             val orderDetails = orderDetailRepository.findAllByOrderId(order.id!!)
 
-            // 주문 상세 정보를 OrderResponse.ProductDetail 객체로 변환합니다.
             val productDetails = orderDetails.map { detail ->
                 OrderResponse.ProductDetail(
                     productId = detail.product.id!!,
-                    category = detail.product.category.id!!, // 카테고리 ID를 가정
+                    category = detail.product.category.id!!,
                     productName = detail.product.name,
                     quantity = detail.quantity,
                     pricePerUInt = detail.product.price
@@ -44,8 +42,8 @@ class OrderServiceImpl(
                 id = order.id,
                 products = productDetails,
                 totalPrice = totalPrice,
-                nickname = order.user.nickname, // 유저의 닉네임을 가정
-                name = order.user.name,        // 유저의 이름을 가정
+                nickname = order.user.nickname,
+                name = order.user.name,
                 createdAt = order.createdAt
             )
         }

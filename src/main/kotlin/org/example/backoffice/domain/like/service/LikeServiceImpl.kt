@@ -8,7 +8,6 @@ import org.example.backoffice.domain.like.model.Like
 import org.example.backoffice.domain.like.model.toResponse
 import org.example.backoffice.domain.like.repository.LikeRepository
 import org.example.backoffice.domain.product.model.Product
-import org.example.backoffice.domain.product.model.toResponse
 import org.example.backoffice.domain.product.repository.ProductRepository
 import org.example.backoffice.domain.user.model.User
 import org.example.backoffice.domain.user.repository.UserRepository
