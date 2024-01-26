@@ -37,7 +37,8 @@ class UserServiceImpl(
 
     override fun login(request: LoginRequest): LoginResponse {
         val user = userRepository.findByEmail(request.email) ?: throw ModelNotFoundException("User", null)
-        checkedLoginPassword(user.password, request.password)
+
+        checkedLoginPassword(user.password, request.password, passwordEncoder)
 
         return LoginResponse(
             accessToken = jwtPlugin.generateAccessToken(
@@ -72,10 +73,11 @@ class UserServiceImpl(
     override fun changePassword(userId: Long, request: ChangePasswordRequest) {
         val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
 
+
         checkedPassword(user.password, request.password, passwordEncoder)
         checkedChangePassword(request.changePassword, request.validatePassword)
 
-        user.password = request.changePassword
+        user.password = passwordEncoder.encode(request.changePassword)
         userRepository.save(user)
 
     }
