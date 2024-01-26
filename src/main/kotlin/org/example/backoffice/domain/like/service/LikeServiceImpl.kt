@@ -43,5 +43,9 @@ class LikeServiceImpl(
             existingLike.toResponse().copy(likes = false)
         }
     }
+
+    override fun likeCheckProduct(userId: Long): List<LikeResponse> {
+        return likeRepository.findAllByUserId(userId)
+    }
 }
 

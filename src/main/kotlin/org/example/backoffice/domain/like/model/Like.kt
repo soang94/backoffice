@@ -31,6 +31,7 @@ class Like(
 fun Like.toResponse(): LikeResponse {
     return LikeResponse(
         userId = user.id!!,
-        likes = likes,
+        productId = product?.id!!,
+        likes = likes
     )
 }

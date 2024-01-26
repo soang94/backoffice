@@ -93,4 +93,14 @@ class UserController(
             .status(HttpStatus.OK)
             .body(userService.changePassword(userId, changePasswordRequest))
     }
+
+    @Operation(summary = "회원 가입")
+    @PatchMapping("/signup")
+    fun adminChange(
+        @Valid @RequestBody signUpRequest: SighUpRequest
+    ): ResponseEntity<UserResponse> {
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(userService.signUp(signUpRequest))
+    }
 }
