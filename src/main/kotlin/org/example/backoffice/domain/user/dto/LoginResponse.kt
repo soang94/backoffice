@@ -1,5 +1,5 @@
 package org.example.backoffice.domain.user.dto
 
-data class LoginResponse (
+data class LoginResponse(
     val accessToken: String
 )

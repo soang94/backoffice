@@ -17,7 +17,6 @@ import org.example.backoffice.domain.user.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.nio.file.AccessDeniedException
 
 
 @Service
@@ -44,7 +43,7 @@ class ProductServiceImpl(
         product.countLiked = countLiked
 
         val review: List<Review> = reviewRepository.findByProductId(productId)
-        product.review.addAll(review)
+        product.reviews.addAll(review)
         return product.toResponse()
     }
 

@@ -2,18 +2,25 @@ package org.example.backoffice.domain.order.model
 
 import jakarta.persistence.*
 import org.example.backoffice.common.model.BaseTime
-import org.example.backoffice.domain.order.dto.OrderResponse
 import org.example.backoffice.domain.product.model.Product
-import org.example.backoffice.domain.user.model.User
 
 @Entity
-@Table(name = "orders")
+@Table (name = "oderdetail")
 
-class Order(
+class OrderDetail (
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    val user: User,
+    @JoinColumn(name = "product_id")
+    val product: Product,
+
+    @Column
+    var quantity : Int,
+
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    val order: Order,
 
 
     ) : BaseTime() {

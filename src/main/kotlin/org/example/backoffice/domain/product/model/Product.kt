@@ -35,7 +35,7 @@ class Product(
 
     @JsonIgnore
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
-    val review: MutableList<Review> = mutableListOf(),
+    val reviews: MutableList<Review> = mutableListOf(),
 
     @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = [CascadeType.REMOVE])
@@ -50,6 +50,10 @@ class Product(
 //    fun addReview(review: Review) {
 //        review.add(review)
 //    }
+
+    fun removeReview(review: Review) {
+        reviews.remove(review)
+    }
 }
 
 fun Product.toResponse(): ProductResponse {
@@ -61,9 +65,9 @@ fun Product.toResponse(): ProductResponse {
         title = title,
         info = info,
         categoryId = category.id!!,
-        review = review.map { it.toResponse() },
         createdAt = this.createdAt,
         updatedAt = this.updatedAt,
-        countLiked = liked.size
+        countLiked = liked.size,
+        review = reviews.map { it.toResponse() },
     )
 }

@@ -1,5 +1,6 @@
 package org.example.backoffice.domain.product.controller
 
+import io.swagger.v3.oas.annotations.Operation
 import org.example.backoffice.common.security.jwt.UserPrincipal
 import org.example.backoffice.domain.product.dto.ProductCreateRequest
 import org.example.backoffice.domain.product.dto.ProductResponse
@@ -14,16 +15,19 @@ import org.springframework.web.bind.annotation.*
 class ProductController(private val productService: ProductService) {
 
 
+    @Operation(summary = "product 전체 조회")
     @GetMapping
     fun getProduct(): ResponseEntity<List<ProductResponse>> {
         return ResponseEntity.status(HttpStatus.OK).body(productService.getProduct())
     }
 
+    @Operation(summary = "product 단건 조회")
     @GetMapping("/{productId}")
     fun getProductById(@PathVariable productId: Long): ResponseEntity<ProductResponse> {
         return ResponseEntity.status(HttpStatus.OK).body(productService.getProductById(productId))
     }
 
+    @Operation(summary = "product 작성")
     @PostMapping
     fun createProduct(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, @RequestBody productCreateRequest: ProductCreateRequest
@@ -33,6 +37,7 @@ class ProductController(private val productService: ProductService) {
         return ResponseEntity.status(HttpStatus.CREATED).body(productResponse)
     }
 
+    @Operation(summary = "product 수정")
     @PatchMapping("/{productId}")
     fun updateProduct(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
@@ -45,6 +50,7 @@ class ProductController(private val productService: ProductService) {
             .body(productService.updateProduct(productId, userId, productCreateRequest))
     }
 
+    @Operation(summary = "product 삭제")
     @DeleteMapping("/{productId}")
     fun deleteProduct(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,

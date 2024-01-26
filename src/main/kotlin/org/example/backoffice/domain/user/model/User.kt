@@ -1,47 +1,49 @@
 package org.example.backoffice.domain.user.model
 
 import jakarta.persistence.*
-import org.example.backoffice.common.exception.EmailAlreadyExistException
-import org.example.backoffice.common.exception.NicknameAlreadyExistException
+import org.example.backoffice.common.exception.*
 import org.example.backoffice.common.model.BaseTime
 import org.example.backoffice.domain.user.dto.UpdateProfileRequest
 import org.example.backoffice.domain.user.dto.UserResponse
 import org.example.backoffice.domain.user.repository.UserRepository
 import org.example.backoffice.domain.user.repository.UserRole
+import org.springframework.security.crypto.password.PasswordEncoder
 
 @Entity
-@Table(name="app_user")
-class User (
-    @Column(name = "email" )
+@Table(name = "app_user")
+class User(
+    @Column(name = "email")
     var email: String,
 
-    @Column(name = "password" )
+    @Column(name = "password")
     var password: String,
 
-    @Column(name = "name" )
+    @Column(name = "name")
     var name: String,
 
-    @Column(name = "birthdate" )
+    @Column(name = "birthdate")
     var birthdate: String,
 
-    @Column(name = "nickname" )
+    @Column(name = "nickname")
     var nickname: String,
 
-    @Column(name = "info" )
+    @Column(name = "info")
     var info: String,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     var role: UserRole
-):BaseTime(){
+
+
+) : BaseTime() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
-    fun toUpdate(request: UpdateProfileRequest) {
+    fun toUpdate(request: UpdateProfileRequest, passwordEncoder: PasswordEncoder) {
         name = request.name
         info = request.info
-        password = request.password
+//        password = passwordEncoder.encode(request.password)
     }
 }
 
@@ -68,5 +70,20 @@ fun checkedEmailOrNicknameExists(email: String, nickname: String, userRepository
         throw NicknameAlreadyExistException(nickname)
     }
 }
+
+fun checkedLoginPassword(password: String, inputPassword: String, passwordEncoder: PasswordEncoder) {
+    if(!passwordEncoder.matches(inputPassword, password)) {
+        throw InvalidPasswordException(inputPassword)
+    }
+}
+
+fun checkedPassword(password: String, inputPassword: String, passwordEncoder: PasswordEncoder) {
+    if(!passwordEncoder.matches(inputPassword, password)) throw WrongPasswordException(inputPassword)
+}
+
+fun checkedChangePassword(changePassword: String, validatePassword: String) {
+    if(changePassword != validatePassword) throw PasswordMismatchException(changePassword, validatePassword)
+}
+
 
 

@@ -1,5 +1,6 @@
 package org.example.backoffice.domain.product.controller
 
+import io.swagger.v3.oas.annotations.Operation
 import org.example.backoffice.domain.product.dto.CategoryCreateRequest
 import org.example.backoffice.domain.product.dto.CategoryResponse
 import org.example.backoffice.domain.product.service.CategoryService
@@ -12,11 +13,13 @@ import org.springframework.web.bind.annotation.*
 @RestController
 class CategoryController(private val categoryService: CategoryService) {
 
+    @Operation(summary = "category 전체 조회")
     @GetMapping
     fun getCategory(): ResponseEntity<List<CategoryResponse>> {
         return ResponseEntity.status(HttpStatus.OK).body(categoryService.getCategory())
     }
 
+    @Operation(summary = "category 생성")
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     fun createCategory(
@@ -25,6 +28,7 @@ class CategoryController(private val categoryService: CategoryService) {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.createCategory(categoryCreateRequest))
     }
 
+    @Operation(summary = "category 수정")
     @PatchMapping("/{categoryId}")
     @PreAuthorize("hasRole('ADMIN')")
     fun updateCategory(

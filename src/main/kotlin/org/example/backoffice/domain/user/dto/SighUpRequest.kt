@@ -44,7 +44,7 @@ data class SighUpRequest(
 
     val info: String,
     val role: String,
-){
+) {
     val email: String
         get() = _email!!
     val password: String

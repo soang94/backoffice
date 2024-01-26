@@ -1,12 +1,9 @@
 package org.example.backoffice.domain.user.service
 
-import org.example.backoffice.common.exception.InvalidRoleException
-import org.example.backoffice.common.exception.ModelNotFoundException
+import org.example.backoffice.common.exception.*
 import org.example.backoffice.common.security.jwt.JwtPlugin
 import org.example.backoffice.domain.user.dto.*
-import org.example.backoffice.domain.user.model.User
-import org.example.backoffice.domain.user.model.checkedEmailOrNicknameExists
-import org.example.backoffice.domain.user.model.toResponse
+import org.example.backoffice.domain.user.model.*
 import org.example.backoffice.domain.user.repository.UserRepository
 import org.example.backoffice.domain.user.repository.UserRole
 import org.springframework.data.repository.findByIdOrNull
@@ -19,7 +16,7 @@ class UserServiceImpl(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
     private val jwtPlugin: JwtPlugin
-): UserService {
+) : UserService {
     override fun userList(): List<UserResponse> {
         return userRepository.findAll().map { it.toResponse() }
     }
@@ -33,13 +30,15 @@ class UserServiceImpl(
     @Transactional
     override fun updateProfile(userId: Long, request: UpdateProfileRequest): UserResponse {
         val profile = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
-        profile.toUpdate(request)
+        profile.toUpdate(request, passwordEncoder)
         userRepository.save(profile)
         return profile.toResponse()
     }
 
     override fun login(request: LoginRequest): LoginResponse {
         val user = userRepository.findByEmail(request.email) ?: throw ModelNotFoundException("User", null)
+
+        checkedLoginPassword(user.password, request.password, passwordEncoder)
 
         return LoginResponse(
             accessToken = jwtPlugin.generateAccessToken(
@@ -54,7 +53,7 @@ class UserServiceImpl(
         checkedEmailOrNicknameExists(request.email, request.nickname, userRepository)
 
         return userRepository.save(
-            User (
+            User(
                 email = request.email,
                 password = passwordEncoder.encode(request.password),
                 name = request.name,
@@ -65,8 +64,21 @@ class UserServiceImpl(
                     "ADMIN" -> UserRole.ADMIN
                     "MEMBER" -> UserRole.MEMBER
                     else -> throw InvalidRoleException(request.role)
-                }
+                },
             )
         ).toResponse()
+    }
+
+    @Transactional
+    override fun changePassword(userId: Long, request: ChangePasswordRequest) {
+        val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
+
+
+        checkedPassword(user.password, request.password, passwordEncoder)
+        checkedChangePassword(request.changePassword, request.validatePassword)
+
+        user.password = passwordEncoder.encode(request.changePassword)
+        userRepository.save(user)
+
     }
 }
