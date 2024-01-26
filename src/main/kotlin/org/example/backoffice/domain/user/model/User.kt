@@ -71,8 +71,10 @@ fun checkedEmailOrNicknameExists(email: String, nickname: String, userRepository
     }
 }
 
-fun checkedLoginPassword(password: String, inputPassword: String) {
-    if(password != inputPassword) throw InvalidPasswordException(inputPassword)
+fun checkedLoginPassword(password: String, inputPassword: String, passwordEncoder: PasswordEncoder) {
+    if(!passwordEncoder.matches(inputPassword, password)) {
+        throw InvalidPasswordException(inputPassword)
+    }
 }
 
 fun checkedPassword(password: String, inputPassword: String, passwordEncoder: PasswordEncoder) {

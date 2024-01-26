@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 class Review(
     @Column(name = "name") var name: String,
     @Column(name = "content") var content: String,
-    @Column(name = "password") var password: String,
+    @Column(name = "password") var password: String? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")

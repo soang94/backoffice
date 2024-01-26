@@ -2,6 +2,7 @@ package org.example.backoffice.domain.review.controller
 
 import io.swagger.v3.oas.annotations.Operation
 import org.example.backoffice.common.security.jwt.UserPrincipal
+import org.example.backoffice.domain.review.dto.CreateReviewRequest
 import org.example.backoffice.domain.review.dto.DeleteReviewRequest
 import org.example.backoffice.domain.review.dto.ReviewRequest
 import org.example.backoffice.domain.review.dto.ReviewResponse
@@ -33,7 +34,7 @@ class ReviewController(
     @PreAuthorize("hasRole('ADMIN') or hasRole('MEMBER')")
     fun createReview(
         @PathVariable productId: Long,
-        @RequestBody request: ReviewRequest
+        @RequestBody request: CreateReviewRequest,
     ): ResponseEntity<ReviewResponse> {
         return ResponseEntity.status(HttpStatus.CREATED).body(reviewService.createReview(productId, request))
     }
@@ -45,9 +46,11 @@ class ReviewController(
     fun updateReview(
         @PathVariable productId: Long,
         @PathVariable reviewId: Long,
-        @RequestBody request: ReviewRequest
+        @RequestBody request: ReviewRequest,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<ReviewResponse> {
-        return ResponseEntity.status(HttpStatus.OK).body(reviewService.updateReview(productId, reviewId, request))
+        val userId = userPrincipal.id
+        return ResponseEntity.status(HttpStatus.OK).body(reviewService.updateReview(productId, reviewId, request, userId))
     }
 
     @Operation(summary = "review 삭제")
@@ -56,9 +59,11 @@ class ReviewController(
     fun deleteReview(
         @PathVariable productId: Long,
         @PathVariable reviewId: Long,
-        @RequestBody deleteReviewRequest: DeleteReviewRequest
+        @RequestBody deleteReviewRequest: DeleteReviewRequest,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<Unit> {
-        reviewService.deleteReview(productId, reviewId, deleteReviewRequest)
+        val userId = userPrincipal.id
+        reviewService.deleteReview(productId, reviewId, deleteReviewRequest, userId)
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
     }
 
