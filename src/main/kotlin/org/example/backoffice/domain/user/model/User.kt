@@ -1,9 +1,7 @@
 package org.example.backoffice.domain.user.model
 
 import jakarta.persistence.*
-import org.example.backoffice.common.exception.EmailAlreadyExistException
-import org.example.backoffice.common.exception.NicknameAlreadyExistException
-import org.example.backoffice.common.exception.PasswordMismatchException
+import org.example.backoffice.common.exception.*
 import org.example.backoffice.common.model.BaseTime
 import org.example.backoffice.domain.user.dto.UpdateProfileRequest
 import org.example.backoffice.domain.user.dto.UserResponse
@@ -73,6 +71,17 @@ fun checkedEmailOrNicknameExists(email: String, nickname: String, userRepository
     }
 }
 
+fun checkedLoginPassword(password: String, inputPassword: String) {
+    if(password != inputPassword) throw InvalidPasswordException(inputPassword)
+}
+
+fun checkedPassword(password: String, inputPassword: String, passwordEncoder: PasswordEncoder) {
+    if(!passwordEncoder.matches(inputPassword, password)) throw WrongPasswordException(inputPassword)
+}
+
+fun checkedChangePassword(changePassword: String, validatePassword: String) {
+    if(changePassword != validatePassword) throw PasswordMismatchException(changePassword, validatePassword)
+}
 
 
 

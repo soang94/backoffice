@@ -3,9 +3,7 @@ package org.example.backoffice.domain.user.service
 import org.example.backoffice.common.exception.*
 import org.example.backoffice.common.security.jwt.JwtPlugin
 import org.example.backoffice.domain.user.dto.*
-import org.example.backoffice.domain.user.model.User
-import org.example.backoffice.domain.user.model.checkedEmailOrNicknameExists
-import org.example.backoffice.domain.user.model.toResponse
+import org.example.backoffice.domain.user.model.*
 import org.example.backoffice.domain.user.repository.UserRepository
 import org.example.backoffice.domain.user.repository.UserRole
 import org.springframework.data.repository.findByIdOrNull
@@ -39,9 +37,7 @@ class UserServiceImpl(
 
     override fun login(request: LoginRequest): LoginResponse {
         val user = userRepository.findByEmail(request.email) ?: throw ModelNotFoundException("User", null)
-        if(user.password != request.password) {
-            throw InvalidPasswordException(request.password)
-        }
+        checkedLoginPassword(user.password, request.password)
 
         return LoginResponse(
             accessToken = jwtPlugin.generateAccessToken(
@@ -76,15 +72,8 @@ class UserServiceImpl(
     override fun changePassword(userId: Long, request: ChangePasswordRequest) {
         val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
 
-        // 현재 비밀번호를 잘 입력했는지
-        if(!passwordEncoder.matches(request.password, user.password)) {
-            throw WrongPasswordException(request.password)
-        }
-
-        // 새로운 비번, 재확인 비번 일치하는지
-        if (request.changePassword != request.validatePassword) {
-            throw PasswordMismatchException(request.changePassword, request.validatePassword)
-        }
+        checkedPassword(user.password, request.password, passwordEncoder)
+        checkedChangePassword(request.changePassword, request.validatePassword)
 
         user.password = request.changePassword
         userRepository.save(user)
