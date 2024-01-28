@@ -100,7 +100,7 @@ class UserServiceImpl(
     @Transactional
     override fun deleteUser(userId: Long): String {
         val user = userRepository.findById(userId).orElseThrow {
-            NoSuchElementException("해당 ID를 가진 사용자를 찾을 수 없습니다.")
+            throw ModelNotFoundException("User", userId)
         }
 
         userRepository.delete(user)
@@ -110,7 +110,7 @@ class UserServiceImpl(
     @Transactional
     override fun deleteMyUser(userId: Long): String {
         val user = userRepository.findById(userId).orElseThrow {
-            NoSuchElementException("해당 ID를 가진 사용자를 찾을 수 없습니다.")
+            throw ModelNotFoundException("User", userId)
         }
 
         userRepository.delete(user)
