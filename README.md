@@ -10,7 +10,7 @@
 
 ## 🎲역할분담
 
-#### 🧑권순형: Product crud와 order, orderdetail 부분 <br/><br/>🧑이승상: 인증/인가, 예외처리, 프로필 조회 * 작성 <br/><br/>🧑이인재: Order crud <br/><br/>👩최혜림: Review crud, 좋아요 기능, 예외처리, 유효성, ADMIN 페이지
+#### 🧑권순형: Product crud와 order, Category crud <br/><br/>🧑이승상: 인증/인가, 예외처리, 프로필 조회 * 수정, 비밀번호 재설정 <br/><br/>🧑이인재: Order crud <br/><br/>👩최혜림: Review crud, 좋아요 기능, 예외처리, 유효성, ADMIN 페이지
 
 <br/>
 
