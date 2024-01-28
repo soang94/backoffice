@@ -8,10 +8,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.PatchMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/likes")
 @RestController
@@ -27,5 +24,15 @@ class LikeController(
     ): ResponseEntity<LikeResponse> {
         val userId = userPrincipal.id
         return ResponseEntity.status(HttpStatus.OK).body(likeService.likeProduct(productId, userId))
+    }
+
+    @Operation(summary = "찜 하기 조회")
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MEMBER')")
+    fun likeCheckProduct(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
+    ): ResponseEntity<List<LikeResponse>> {
+        val userId = userPrincipal.id
+        return ResponseEntity.status(HttpStatus.OK).body(likeService.likeCheckProduct(userId))
     }
 }
