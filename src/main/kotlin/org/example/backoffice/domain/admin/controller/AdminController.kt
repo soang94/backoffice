@@ -29,8 +29,9 @@ class AdminController(
     @PatchMapping("/users/{userId}")
     fun userChangeAdmin(
         @PathVariable userId: Long,
-        @RequestBody request: AdminDTO): BaseResponse<AdminDTO> {
-        val resultMsg: String = userService.userChangeAdmin(userId,request)
+        @RequestBody request: AdminDTO
+    ): BaseResponse<AdminDTO> {
+        val resultMsg: String = userService.userChangeAdmin(userId, request)
         return BaseResponse(message = resultMsg)
     }
 
