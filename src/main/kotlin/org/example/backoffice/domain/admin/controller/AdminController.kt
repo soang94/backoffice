@@ -39,10 +39,10 @@ class AdminController(
     @Operation(summary = "user 삭제")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/users/{userId}")
-    fun deleteUser(@PathVariable userId: Long): ResponseEntity<Unit> {
+    fun deleteUser(@PathVariable userId: Long): ResponseEntity<Any> {
         userService.deleteUser(userId)
         return ResponseEntity
-            .status(HttpStatus.NO_CONTENT)
-            .build()
+            .status(HttpStatus.OK)
+            .body("탈퇴 처리되었습니다.")
     }
 }
