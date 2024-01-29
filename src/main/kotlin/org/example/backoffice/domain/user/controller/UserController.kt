@@ -50,11 +50,11 @@ class UserController(
     fun deleteMyUser(
         @PathVariable userId: Long,
         @AuthenticationPrincipal userPrincipal: UserPrincipal
-    ): ResponseEntity<Unit> {
+    ): ResponseEntity<Any> {
         userService.deleteUser(userId)
         return ResponseEntity
-            .status(HttpStatus.NO_CONTENT)
-            .build()
+            .status(HttpStatus.OK)
+            .body("탈퇴처리되었습니다")
     }
 
     @Operation(summary = "로그인")
@@ -91,7 +91,7 @@ class UserController(
     ): ResponseEntity<Any> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(userService.changePassword(userId, changePasswordRequest))
+            .body("비밀번호 재설정 완료했습니다")
     }
 
 }
